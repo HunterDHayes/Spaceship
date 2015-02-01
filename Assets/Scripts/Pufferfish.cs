@@ -84,7 +84,8 @@ public class Pufferfish : MoveableObject
         if (Input.GetMouseButtonDown(0))
         {
             GameObject manager = GameObject.FindGameObjectWithTag("MainCamera");
-            manager.SendMessage("LoseLive");
+            if (manager)
+                manager.SendMessage("LoseLive");
             Destroy(gameObject);
         }
     }

@@ -77,7 +77,8 @@ public class Shark : MoveableObject
         if (!m_TookLife)
         {
             GameObject manager = GameObject.FindGameObjectWithTag("MainCamera");
-            manager.SendMessage("LoseLive");
+            if (manager)
+                manager.SendMessage("LoseLive");
         }
     }
 
