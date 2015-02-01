@@ -12,6 +12,7 @@ public class MainMenuController : MonoBehaviour
     public ButtonController m_bSFX;
     public Canvas m_cCredits;
     public Canvas m_cMainMenu;
+    public Canvas m_cDifficultyMenu;
 
 
     // Use this for initialization
@@ -19,6 +20,7 @@ public class MainMenuController : MonoBehaviour
     {
         m_cMainMenu.gameObject.SetActive(true);
         m_cCredits.gameObject.SetActive(false);
+        m_cDifficultyMenu.gameObject.SetActive(false);
         #region Create Audio Assets
         m_MusicAudioSources = new AudioSource[m_MusicAudioClips.Length];
 
@@ -70,25 +72,57 @@ public class MainMenuController : MonoBehaviour
 
     }
 
+    /// <summary>
+    ///Exit the game
+    /// </summary>
     public void exitGame()
     {
         Application.Quit();
     }
 
+    /// <summary>
+    /// Goes to Select Difficulty level
+    /// </summary>
     public void startGame()
     {
-        Application.LoadLevel("Gameplay");
+        m_cMainMenu.gameObject.SetActive(false);
+        m_cCredits.gameObject.SetActive(false);
+        m_cDifficultyMenu.gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// Open the credits menu
+    /// </summary>
     public void creditsMenu()
     {
         m_cMainMenu.gameObject.SetActive(false);
         m_cCredits.gameObject.SetActive(true);
+        m_cDifficultyMenu.gameObject.SetActive(false);
     }
-
+    /// <summary>
+    /// Goes back to the main menu
+    /// </summary>
     public void mainMenu()
     {
         m_cMainMenu.gameObject.SetActive(true);
         m_cCredits.gameObject.SetActive(false);
+        m_cDifficultyMenu.gameObject.SetActive(false);
+    }
+
+    public void startEasyGame() {
+        PlayerPrefs.SetString("Difficulty", "Easy");
+        Application.LoadLevel("GamePlay");
+    }
+
+    public void startMediumGame()
+    {
+        PlayerPrefs.SetString("Difficulty", "Medium");
+        Application.LoadLevel("GamePlay");
+    }
+
+    public void startHardGame()
+    {
+        PlayerPrefs.SetString("Difficulty", "Hard");
+        Application.LoadLevel("GamePlay");
     }
 }
