@@ -81,8 +81,8 @@ public class GuiRenderer : MonoBehaviour
         PlayerPrefs.SetInt("Score", 0);
         PlayerPrefs.SetInt("Paused", -1);
 
-        //int random = Random.Range(0, m_MusicAudioSources.Length);
-        //m_MusicAudioSources[random].Play();
+        int random = Random.Range(0, m_MusicAudioSources.Length);
+        m_MusicAudioSources[random].Play();
     }
 
     // Update is called once per frame

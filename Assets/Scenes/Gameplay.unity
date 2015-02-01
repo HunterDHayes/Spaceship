@@ -170,7 +170,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eaf8b9b8763c7c4f9a9e02bbdff79ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MusicAudioClips: []
+  m_MusicAudioClips:
+  - {fileID: 8300000, guid: 2428b9a26ddb76b4aa696b165467d0ea, type: 3}
   m_SfxAudioClips: []
   m_PreferredScreenSize: {x: 1280, y: 720}
   m_ScoreBoxRenderPosition: {x: 392, y: 32}
