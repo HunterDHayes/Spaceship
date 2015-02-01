@@ -65,16 +65,20 @@ MonoBehaviour:
   m_ParticleColor: {r: .53725493, g: .305882365, b: .0705882385, a: 1}
   m_DeathParticleSystemPrefab: {fileID: 19801956, guid: e2d3ed25fad647448bb204fd2da0d3c0,
     type: 2}
-  m_SfxAudioClips: []
+  m_SfxAudioClips:
+  - {fileID: 8300000, guid: f7a4dd9c610a3ac4e8843bd5b045cb17, type: 3}
+  - {fileID: 8300000, guid: 77d4279931e49384d8b4a5a1b3644ef1, type: 3}
   m_ScoreValue: 150
   m_ParticleSystemPrefab: {fileID: 19841480, guid: 1a0cd71a7aea9ea45a438dacfba28001,
     type: 2}
   m_ParticleSystem: {fileID: 0}
   m_TextureToRender: 0
-  m_AnimationTime: .5
+  m_AnimationTime: .25
   m_AnimationTimer: 0
   m_AnimationTextures:
-  - {fileID: 21300000, guid: 1d176e70424dda14f840597cc7a7f1e2, type: 3}
+  - {fileID: 21300000, guid: d83c55aba2daf69418e61b8ec90899c4, type: 3}
+  - {fileID: 21300000, guid: 96f13c11d4efc5347b1faa1c095c74a7, type: 3}
+  m_IsSetToDestroy: 0
 --- !u!212 &21214330
 SpriteRenderer:
   m_ObjectHideFlags: 1
