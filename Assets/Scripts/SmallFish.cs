@@ -103,6 +103,7 @@ public class SmallFish : MoveableObject
             DestroyObject(ps, 1.0f);
 
             PlayerPrefs.SetInt("Score", PlayerPrefs.GetInt("Score") + m_ScoreValue);
+            m_SfxAudioSources[0].Play();
             Destroy(gameObject);
         }
     }

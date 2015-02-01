@@ -28,6 +28,9 @@ public class GuiRenderer : MonoBehaviour
     public bool m_IsPaused;
     public Vector2 m_PauseButtonPosition, m_PauseMenuPosition, m_ResumeButtonPosition, m_RestartButtonPosition, m_ExitButtonPosition, m_MusicButtonPosition, m_SFXButtonPosition;
     public int m_PauseMenuTextSize;
+
+    // Changing Scenes
+    private int m_SceneToChangeTo;
     #endregion
 
     #region GUITextures
@@ -104,21 +107,40 @@ public class GuiRenderer : MonoBehaviour
 
         float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
 
+        bool _ChangeScene = true;
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
-            m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+            if(!m_SfxAudioSources[i].isPlaying)
+                m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+            else
+                _ChangeScene = false;
+
+        if (_ChangeScene)
+        {
+            if (m_SceneToChangeTo == 1)
+                Application.LoadLevel("Gameplay");
+            else if (m_SceneToChangeTo == 2)
+                Application.LoadLevel("Main Menu");
+            else if (m_SceneToChangeTo == 3)
+                Application.LoadLevel("End Menu");
+        }
+
 
         if (m_DamageOverlayTimer > 0.0f && PlayerPrefs.GetInt("Paused") == -1)
             m_DamageOverlayTimer -= Time.deltaTime;
 
         if (!m_Lives[2])
-            Application.LoadLevel("End Menu");
+            //Application.LoadLevel("End Menu");
+            m_SceneToChangeTo = 2;
     }
 
     // Render GUI Elements
     void OnGUI()
     {
         if (RenderGUIButton(m_PauseButtonPosition.x, m_PauseButtonPosition.y, m_HUD.GetStyle("PauseButton").normal.background.width * 2, m_HUD.GetStyle("PauseButton").normal.background.height * 2, m_HUD.GetStyle("PauseButton")))
+        {
             PlayerPrefs.SetInt("Paused", 1);
+            m_SfxAudioSources[0].Play();
+        }
 
         // Lives
         for (int i = 0; i < m_Lives.Length; i++)
@@ -142,30 +164,52 @@ public class GuiRenderer : MonoBehaviour
             // Resumes the game
             if (RenderGUIButton(m_PauseMenuPosition.x + m_ResumeButtonPosition.x, m_PauseMenuPosition.y + m_ResumeButtonPosition.y,
                 m_HUD.GetStyle("PauseMenuButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuButton").normal.background.height * 2, "Resume", m_HUD.GetStyle("PauseMenuButton")))
+            {
                 PlayerPrefs.SetInt("Paused", -1);
-
+                m_SfxAudioSources[0].Play();
+            }
             // Restart Game
             if (RenderGUIButton(m_PauseMenuPosition.x + m_RestartButtonPosition.x, m_PauseMenuPosition.y + m_RestartButtonPosition.y,
                 m_HUD.GetStyle("PauseMenuButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuButton").normal.background.height * 2, "Restart", m_HUD.GetStyle("PauseMenuButton")))
-                Application.LoadLevel("Gameplay");
+            {
+                //Application.LoadLevel("Gameplay");
+                m_SceneToChangeTo = 1;
+                m_SfxAudioSources[0].Play();
+            }
 
             // Exit to Main menu
             if (RenderGUIButton(m_PauseMenuPosition.x + m_ExitButtonPosition.x, m_PauseMenuPosition.y + m_ExitButtonPosition.y,
                 m_HUD.GetStyle("PauseMenuExitButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuExitButton").normal.background.height * 2, "Exit", m_HUD.GetStyle("PauseMenuExitButton")))
-                Application.LoadLevel("Main Menu");
+            {
+                //Application.LoadLevel("Main Menu");
+                m_SceneToChangeTo = 2;
+                m_SfxAudioSources[1].Play();
+            }
 
             // SFX Button
             if (PlayerPrefs.GetFloat("SFXVolume") == 100.0f)
             {
                 if (RenderGUIButton(m_PauseMenuPosition.x + m_SFXButtonPosition.x, m_PauseMenuPosition.y + m_SFXButtonPosition.y,
                 m_HUD.GetStyle("PauseMenuSFXOnButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuSFXOnButton").normal.background.height * 2, "", m_HUD.GetStyle("PauseMenuSFXOnButton")))
+                {
+                    m_SfxAudioSources[1].Play();
                     PlayerPrefs.SetFloat("SFXVolume", 0.0f);
+                }
             }
             else
             {
                 if (RenderGUIButton(m_PauseMenuPosition.x + m_SFXButtonPosition.x, m_PauseMenuPosition.y + m_SFXButtonPosition.y,
                 m_HUD.GetStyle("PauseMenuSFXOffButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuSFXOffButton").normal.background.height * 2, "", m_HUD.GetStyle("PauseMenuSFXOffButton")))
+                {
                     PlayerPrefs.SetFloat("SFXVolume", 100.0f);
+
+                    float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+
+                    for (int i = 0; i < m_SfxAudioSources.Length; i++)
+                        m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+
+                    m_SfxAudioSources[0].Play();
+                }
             }
 
             // Music Button
@@ -173,13 +217,19 @@ public class GuiRenderer : MonoBehaviour
             {
                 if (RenderGUIButton(m_PauseMenuPosition.x + m_MusicButtonPosition.x, m_PauseMenuPosition.y + m_MusicButtonPosition.y,
                 m_HUD.GetStyle("PauseMenuMusicOnButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuMusicOnButton").normal.background.height * 2, "", m_HUD.GetStyle("PauseMenuMusicOnButton")))
+                {
                     PlayerPrefs.SetFloat("MusicVolume", 0.0f);
+                    m_SfxAudioSources[1].Play();
+                }
             }
             else
             {
                 if (RenderGUIButton(m_PauseMenuPosition.x + m_MusicButtonPosition.x, m_PauseMenuPosition.y + m_MusicButtonPosition.y,
                 m_HUD.GetStyle("PauseMenuMusicOffButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuMusicOffButton").normal.background.height * 2, "", m_HUD.GetStyle("PauseMenuMusicOffButton")))
+                {
                     PlayerPrefs.SetFloat("MusicVolume", 100.0f);
+                    m_SfxAudioSources[0].Play();
+                }
             }
         }
     }

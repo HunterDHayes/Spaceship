@@ -171,8 +171,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_MusicAudioClips:
-  - {fileID: 8300000, guid: 18ccfc98689505742bb3924021aea0d1, type: 3}
-  m_SfxAudioClips: []
+  - {fileID: 0}
+  m_SfxAudioClips:
+  - {fileID: 8300000, guid: d548bae03ee2aaf43a0fcd6a0d852913, type: 3}
+  - {fileID: 8300000, guid: b5354d67941e31b4c81f6edc863926e9, type: 3}
   m_PreferredScreenSize: {x: 1280, y: 720}
   m_ScoreBoxRenderPosition: {x: 392, y: 32}
   m_ScoreRenderPosition: {x: 32, y: 0}

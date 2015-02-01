@@ -64,7 +64,7 @@ public class Spawner : MonoBehaviour
                     m_MaxSpawnTimes = m_HardMaxSpawnTimes;
                     break;
                 }
-            case "Normal":
+            case "Medium":
                 {
                     m_MinSpawnTimes = m_NormalMinSpawnTimes;
                     m_MaxSpawnTimes = m_NormalMaxSpawnTimes;
