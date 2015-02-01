@@ -81,8 +81,8 @@ public class GuiRenderer : MonoBehaviour
         PlayerPrefs.SetInt("Score", 0);
         PlayerPrefs.SetInt("Paused", -1);
 
-        int random = Random.Range(0, m_MusicAudioSources.Length);
-        m_MusicAudioSources[random].Play();
+        //int random = Random.Range(0, m_MusicAudioSources.Length);
+        //m_MusicAudioSources[random].Play();
     }
 
     // Update is called once per frame
@@ -109,6 +109,10 @@ public class GuiRenderer : MonoBehaviour
     // Render GUI Elements
     void OnGUI()
     {
+        if (RenderGUIButton(m_PauseButtonPosition.x, m_PauseButtonPosition.y, m_HUD.GetStyle("PauseButton").normal.background.width * 2, m_HUD.GetStyle("PauseButton").normal.background.height * 2, m_HUD.GetStyle("PauseButton")))
+        {
+            PlayerPrefs.SetInt("Paused", 1);
+        }
 
         // Lives
         for (int i = 0; i < m_Lives.Length; i++)
@@ -140,13 +144,8 @@ public class GuiRenderer : MonoBehaviour
 
             // Exit to Main menu
             if (RenderGUIButton(m_PauseMenuPosition.x + m_ExitButtonPosition.x, m_PauseMenuPosition.y + m_ExitButtonPosition.y,
-                m_HUD.GetStyle("PauseMenuButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuButton").normal.background.height * 2, "Exit Game", m_HUD.GetStyle("PauseMenuButton")))
+                m_HUD.GetStyle("PauseMenuButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuButton").normal.background.height * 2, "Exit", m_HUD.GetStyle("PauseMenuButton")))
                 Application.LoadLevel("Main Menu");
-        }
-
-        if (RenderGUIButton(m_PauseButtonPosition.x, m_PauseButtonPosition.y, m_HUD.GetStyle("PauseButton").normal.background.width * 2, m_HUD.GetStyle("PauseButton").normal.background.height * 2, m_HUD.GetStyle("PauseButton")))
-        {
-            PlayerPrefs.SetInt("Paused", 1);
         }
     }
     #endregion
