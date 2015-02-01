@@ -959,7 +959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_bOn: {fileID: 21300000, guid: f3a104cf9e8952149821c1749a3b71f3, type: 3}
-  m_bOff: {fileID: 0}
+  m_bOff: {fileID: 21300000, guid: a1555605dd8ba964c83b979416ab17d0, type: 3}
   m_iButton: {fileID: 818925710}
 --- !u!1 &844876282
 GameObject:
@@ -2178,7 +2178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_bOn: {fileID: 21300000, guid: e03c0369878d3184a8536b47c4645cec, type: 3}
-  m_bOff: {fileID: 0}
+  m_bOff: {fileID: 21300000, guid: 58889d917b5dd1a43b78b30e05cad5d1, type: 3}
   m_iButton: {fileID: 1598234073}
 --- !u!114 &1598234076
 MonoBehaviour:
