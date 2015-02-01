@@ -256,6 +256,7 @@ public class GuiRenderer : MonoBehaviour
             {
                 m_Lives[i] = false;
                 m_DamageOverlayTimer = m_DamageOverlayTime;
+                m_SfxAudioSources[2].Play();
                 break;
             }
         }

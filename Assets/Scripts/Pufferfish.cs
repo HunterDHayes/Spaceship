@@ -15,6 +15,9 @@ public class Pufferfish : MoveableObject
     public int m_TextureToRender;
     public float m_AnimationTime, m_AnimationTimer;
     public Sprite[] m_AnimationTextures;
+
+    // Destroy Properties
+    public bool m_IsSetToDestroy;
     #endregion
 
     // Use this for initialization
@@ -47,8 +50,17 @@ public class Pufferfish : MoveableObject
     {
         float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
 
+        bool destroy = true;
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
+        {
             m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+
+            if (m_SfxAudioSources[i].isPlaying)
+                destroy = false;
+        }
+
+        if (destroy && m_IsSetToDestroy)
+            Destroy(gameObject);
      
         if (PlayerPrefs.GetInt("Paused") == 1)
             return;
@@ -86,18 +98,19 @@ public class Pufferfish : MoveableObject
         if (PlayerPrefs.GetInt("Paused") == 1)
             return;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !m_SfxAudioSources[0].isPlaying)
         {
             ParticleSystem ps = (ParticleSystem)Instantiate(m_DeathParticleSystemPrefab, transform.position, Quaternion.identity);
             ps.startColor = m_ParticleColor;
             ps.renderer.sortingOrder = 1;
             ps.Play();
-            DestroyObject(ps, 1.0f);
 
             GameObject manager = GameObject.FindGameObjectWithTag("MainCamera");
             if (manager)
                 manager.SendMessage("LoseLive");
-            Destroy(gameObject);
+
+            m_SfxAudioSources[0].Play();
+            m_IsSetToDestroy = true;
         }
     }
 }
