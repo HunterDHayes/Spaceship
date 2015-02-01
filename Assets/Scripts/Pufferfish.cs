@@ -1,22 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Shark : MoveableObject
+public class Pufferfish : MoveableObject
 {
     #region DataMembers
     // Audio
     public AudioClip[] m_SfxAudioClips;
     private AudioSource[] m_SfxAudioSources;
 
-    // Score
-    public int m_ScoreValue;
+    // Rotation Properties
+    private Transform tran;
+    public float m_RotationScale;
     #endregion
 
     // Use this for initialization
     override protected void Start()
     {
         #region Create Audio Assets
-
         m_SfxAudioSources = new AudioSource[m_SfxAudioClips.Length];
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
@@ -36,12 +36,16 @@ public class Shark : MoveableObject
         #endregion
 
         base.Start();
+
+        tran = transform;
     }
 
     // Update is called once per frame
     override protected void Update()
     {
         base.Update();
+
+        transform.Rotate(Vector3.forward, Mathf.Cos(m_TimeAlive) * m_RotationScale);
     }
 
     override protected void OnBecameInvisible()
@@ -58,7 +62,8 @@ public class Shark : MoveableObject
     {
         if (Input.GetMouseButtonDown(0))
         {
-            PlayerPrefs.SetInt("Score", PlayerPrefs.GetInt("Score") + m_ScoreValue);
+            GameObject manager = GameObject.FindGameObjectWithTag("MainCamera");
+            manager.SendMessage("LoseLive");
             Destroy(gameObject);
             return true;
         }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Shark : MoveableObject
+public class SmallFish : MoveableObject
 {
     #region DataMembers
     // Audio
@@ -10,13 +10,15 @@ public class Shark : MoveableObject
 
     // Score
     public int m_ScoreValue;
+
+    // Particle
+    public ParticleSystem m_ParticleSystemPrefab, m_ParticleSystem;
     #endregion
 
     // Use this for initialization
     override protected void Start()
     {
         #region Create Audio Assets
-
         m_SfxAudioSources = new AudioSource[m_SfxAudioClips.Length];
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
@@ -36,17 +38,25 @@ public class Shark : MoveableObject
         #endregion
 
         base.Start();
+
+        m_ParticleSystem = (ParticleSystem)Instantiate(m_ParticleSystemPrefab, transform.position, Quaternion.identity);
+        m_ParticleSystem.Play();
+        m_ParticleSystem.renderer.sortingOrder = this.renderer.sortingOrder;
     }
 
     // Update is called once per frame
     override protected void Update()
     {
         base.Update();
+
+        m_ParticleSystem.transform.position = transform.position;
     }
 
     override protected void OnBecameInvisible()
     {
         base.OnBecameInvisible();
+        m_ParticleSystem.Stop();
+        Destroy(m_ParticleSystem, 2.5f);
     }
 
     protected void OnMouseOver()

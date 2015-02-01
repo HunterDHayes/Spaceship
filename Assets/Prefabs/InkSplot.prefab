@@ -25,8 +25,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 132300}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -39,8 +39,8 @@ CircleCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Radius: .0900000036
-  m_Center: {x: 0, y: 0}
+  m_Radius: .699999988
+  m_Center: {x: .100000001, y: -.0500000007}
 --- !u!114 &11432300
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -52,11 +52,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd61eeb3ff854604d846e2ab1c6c8c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MusicAudioClips: []
-  m_SfxAudioClips: []
+  m_SfxAudioClips:
+  - {fileID: 8300000, guid: b1aa105fb4231fc4d8cdf01b1df3f87d, type: 3}
   m_MinInkTime: 5
   m_MaxInkTime: 7.5
+  m_InkTime: 0
   m_InkTimer: 0
+  m_ParticleSystemPrefab: {fileID: 19800828, guid: 38bc6c199994d6d4d9095d1e4e9fe84b,
+    type: 2}
+  m_ParticleSystem: {fileID: 0}
 --- !u!212 &21232300
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -76,9 +80,9 @@ SpriteRenderer:
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
-  m_SortingOrder: 3
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_SortingOrder: 6
+  m_Sprite: {fileID: 21300000, guid: 9001c3b3e7db47342910cb346854eb33, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

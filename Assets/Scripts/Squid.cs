@@ -5,9 +5,7 @@ public class Squid : MoveableObject
 {
     #region DataMembers
     // Audio
-    public AudioClip[] m_MusicAudioClips;
     public AudioClip[] m_SfxAudioClips;
-    private AudioSource[] m_MusicAudioSources;
     private AudioSource[] m_SfxAudioSources;
 
     // Score Value
@@ -22,18 +20,6 @@ public class Squid : MoveableObject
     override protected void Start()
     {
         #region Create Audio Assets
-        m_MusicAudioSources = new AudioSource[m_MusicAudioClips.Length];
-
-        for (int i = 0; i < m_MusicAudioSources.Length; i++)
-        {
-            GameObject child = new GameObject("Player");
-            child.transform.parent = gameObject.transform;
-
-            m_MusicAudioSources[i] = child.AddComponent("AudioSource") as AudioSource;
-            m_MusicAudioSources[i].clip = m_MusicAudioClips[i];
-            m_MusicAudioSources[i].loop = true;
-        }
-
         m_SfxAudioSources = new AudioSource[m_SfxAudioClips.Length];
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
@@ -46,11 +32,7 @@ public class Squid : MoveableObject
             m_SfxAudioSources[i].loop = false;
         }
 
-        float fMusicVolume = PlayerPrefs.GetFloat("MusicVolume");
         float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
-
-        for (int i = 0; i < m_MusicAudioSources.Length; i++)
-            m_MusicAudioSources[i].volume = fMusicVolume / 100.0f;
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
             m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;

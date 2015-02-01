@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 419964}
   - 212: {fileID: 21219964}
   - 114: {fileID: 11419964}
-  - 58: {fileID: 5875464}
+  - 61: {fileID: 6191282}
   m_Layer: 0
   m_Name: Squid
   m_TagString: Squid
@@ -26,12 +26,12 @@ Transform:
   m_GameObject: {fileID: 119964}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 7, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!58 &5875464
-CircleCollider2D:
+--- !u!61 &6191282
+BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -39,8 +39,8 @@ CircleCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Radius: .0900000036
-  m_Center: {x: 0, y: 0}
+  m_Size: {x: 1.04999995, y: .75}
+  m_Center: {x: -.50999999, y: 0}
 --- !u!114 &11419964
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -52,15 +52,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859bd9a4bda053e4b81cbac8b4cd45ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MovementSpeed: 1
+  m_MinMovementSpeed: .75
+  m_MaxMovementSpeed: 1.25
+  m_MovementSpeed: 0
   m_YPosition: 0
   m_TimeAlive: 0
-  m_WaveMovementScale: 1
+  m_MinWaveMovementScale: .5
+  m_MaxWaveMovementScale: 1
+  m_WaveMovementScale: 0
   m_IsMovingRight: 1
   m_IsMovingSin: 0
-  m_MusicAudioClips: []
   m_SfxAudioClips: []
-  m_ScoreValue: 250
+  m_ScoreValue: 100
   m_InkSplot: {fileID: 11432300, guid: 32a61067927e332429a1103bcd895433, type: 2}
   m_MinInkTime: 2
   m_MaxInkTime: 4
@@ -85,8 +88,8 @@ SpriteRenderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: .988235295, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: a71b880cfb9b61b4686d6808d4d07963, type: 3}
+  m_Color: {r: .988235295, g: .988235295, b: .988235295, a: 1}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

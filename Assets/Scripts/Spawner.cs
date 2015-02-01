@@ -11,12 +11,9 @@ public class Spawner : MonoBehaviour
     private AudioSource[] m_MusicAudioSources;
     private AudioSource[] m_SfxAudioSources;
 
-    // Enums
-    enum MoveableObjectEnum { FISH, SHARK, SQUID };
-
     // Properties
     public MoveableObject[] m_MoveableObjects;
-    public float m_SpawnRange;
+    public float m_SpawnRange, m_SpawnPosition;
     public float[] m_MinSpawnTimes, m_MaxSpawnTimes, m_SpawnTimers;
     #endregion
 
@@ -76,11 +73,11 @@ public class Spawner : MonoBehaviour
                 float x = Random.Range(0, 2);
 
                 if (x == 0)
-                    x = -10;
+                    x = -m_SpawnPosition;
                 else
-                    x = 10;
+                    x = m_SpawnPosition;
 
-                float y = Random.Range(-m_SpawnRange, m_SpawnRange);
+                float y = Random.Range(transform.position.y + -m_SpawnRange, transform.position.y + m_SpawnRange);
 
                 Vector3 position = new Vector3(x, y, 0);
                 Instantiate(m_MoveableObjects[i], position, Quaternion.identity);

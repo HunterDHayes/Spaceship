@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Shark : MoveableObject
+public class BigFish : MoveableObject
 {
     #region DataMembers
     // Audio
@@ -16,7 +16,6 @@ public class Shark : MoveableObject
     override protected void Start()
     {
         #region Create Audio Assets
-
         m_SfxAudioSources = new AudioSource[m_SfxAudioClips.Length];
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)

@@ -78,6 +78,9 @@ public class GuiRenderer : MonoBehaviour
         #endregion
 
         PlayerPrefs.SetInt("Score", 0);
+
+        PlayerPrefs.SetFloat("MusicVolume", 100);
+        PlayerPrefs.SetFloat("SFXVolume", 100);
     }
 
     // Update is called once per frame
@@ -111,8 +114,6 @@ public class GuiRenderer : MonoBehaviour
             {
                 m_IsPaused = true;
             }
-
-
         }
         // Paused
         else

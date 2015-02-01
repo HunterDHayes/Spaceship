@@ -173,13 +173,13 @@ MonoBehaviour:
   m_MusicAudioClips: []
   m_SfxAudioClips: []
   m_PreferredScreenSize: {x: 1280, y: 720}
-  m_ScoreRenderPosition: {x: 800, y: 0}
+  m_ScoreRenderPosition: {x: 500, y: 32}
   m_ScoreFontSize: 30
   m_Lives: 010101
-  m_LivesRenderPosition: {x: 64, y: 64}
-  m_LivesRenderSpacing: 50
+  m_LivesRenderPosition: {x: 1024, y: 32}
+  m_LivesRenderSpacing: 32
   m_IsPaused: 0
-  m_PauseButtonPosition: {x: 1000, y: 600}
+  m_PauseButtonPosition: {x: 64, y: 32}
   m_PauseMenuPosition: {x: 100, y: 100}
   m_ResumeButtonPosition: {x: 50, y: 50}
   m_RestartButtonPosition: {x: 50, y: 150}
@@ -221,19 +221,32 @@ MonoBehaviour:
   m_MusicAudioClips: []
   m_SfxAudioClips: []
   m_MoveableObjects:
+  - {fileID: 11406412, guid: 3350ee32e3adf574597f5f75f68f9db1, type: 2}
   - {fileID: 11464530, guid: f8b60feefe692c14d9c228fea82f8b21, type: 2}
+  - {fileID: 11414330, guid: 31ea36c7bcc3a19468d39cdae83f0bd0, type: 2}
   - {fileID: 11444722, guid: 5667a89391825f849a92b934a59926a8, type: 2}
   - {fileID: 11419964, guid: e2509ae987d153344b4c4ca5688191c9, type: 2}
-  m_SpawnRange: 2
+  - {fileID: 11428274, guid: 6bb0707c477a7af4fa715ace97aaf5ef, type: 2}
+  m_SpawnRange: 2.5
+  m_SpawnPosition: 12
   m_MinSpawnTimes:
-  - 1
-  - 2
+  - 1.5
   - 3
-  m_MaxSpawnTimes:
-  - 2
-  - 4
   - 6
+  - 6
+  - 5
+  - 7.5
+  m_MaxSpawnTimes:
+  - 3
+  - 6
+  - 12
+  - 12
+  - 10
+  - 15
   m_SpawnTimers:
+  - 0
+  - 0
+  - 0
   - 0
   - 0
   - 0
@@ -244,7 +257,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1185300535}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -297,9 +310,9 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 960, y: 640}
+  m_ReferenceResolution: {x: 1280, y: 720}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -363,7 +376,7 @@ Transform:
   m_GameObject: {fileID: 1745251388}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 71, y: 71, z: 1}
+  m_LocalScale: {x: 90, y: 90, z: 1}
   m_Children: []
   m_Father: {fileID: 1653257550}
   m_RootOrder: 0

@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 444722}
   - 212: {fileID: 21244722}
   - 114: {fileID: 11444722}
-  - 58: {fileID: 5870372}
+  - 61: {fileID: 6156544}
   m_Layer: 0
   m_Name: Shark
   m_TagString: Shark
@@ -26,12 +26,12 @@ Transform:
   m_GameObject: {fileID: 144722}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!58 &5870372
-CircleCollider2D:
+--- !u!61 &6156544
+BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -39,7 +39,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Radius: .0900000036
+  m_Size: {x: 1.14999998, y: .5}
   m_Center: {x: 0, y: 0}
 --- !u!114 &11444722
 MonoBehaviour:
@@ -52,14 +52,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d70d54f23ef2f684ab602e22adc97800, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MovementSpeed: 1
+  m_MinMovementSpeed: 2
+  m_MaxMovementSpeed: 2.5
+  m_MovementSpeed: 0
   m_YPosition: 0
   m_TimeAlive: 0
+  m_MinWaveMovementScale: .75
+  m_MaxWaveMovementScale: 1.25
   m_WaveMovementScale: 1
   m_IsMovingRight: 1
   m_IsMovingSin: 0
   m_MusicAudioClips: []
   m_SfxAudioClips: []
+  m_ScoreValue: 100
 --- !u!212 &21244722
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -80,8 +85,8 @@ SpriteRenderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: .693103433, g: .693103433, b: .693103433, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 8e7f3a75392ea3b4f9ce2ba32c4a8406, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
