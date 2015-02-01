@@ -3,8 +3,7 @@ using System.Collections;
 
 public class InkSplot : MonoBehaviour
 {
-
-    #region DataMembers
+        #region DataMembers
     // Audio
     public AudioClip[] m_MusicAudioClips;
     public AudioClip[] m_SfxAudioClips;
@@ -12,7 +11,7 @@ public class InkSplot : MonoBehaviour
     private AudioSource[] m_SfxAudioSources;
 
     // Ink Splot
-    public float m_InkTime, m_InkTimer;
+    public float m_MinInkTime, m_MaxInkTime, m_InkTimer;
     #endregion
 
     // Use this for initialization
@@ -52,14 +51,16 @@ public class InkSplot : MonoBehaviour
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
             m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
         #endregion
+
+        m_InkTimer = Random.Range(m_MinInkTime, m_MaxInkTime);
     }
 
     // Update is called once per frame
     protected void Update()
     {
-        m_InkTimer += Time.deltaTime;
+        m_InkTimer -= Time.deltaTime;
 
-        if (m_InkTimer >= m_InkTime)
+        if (m_InkTimer <= 0.0f)
             Destroy(gameObject);
     }
 
