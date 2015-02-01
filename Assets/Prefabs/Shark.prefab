@@ -62,9 +62,16 @@ MonoBehaviour:
   m_WaveMovementScale: 1
   m_IsMovingRight: 1
   m_IsMovingSin: 0
-  m_MusicAudioClips: []
   m_SfxAudioClips: []
   m_ScoreValue: 100
+  m_TookLife: 0
+  m_TextureToRender: 0
+  m_AnimationTime: .5
+  m_AnimationTimer: 0
+  m_AnimationTextures:
+  - {fileID: 21300000, guid: 7611cd8e7e7781d409deece42d9f9a66, type: 3}
+  - {fileID: 21300000, guid: 79866280ac8b9f240b213902bc51eaf2, type: 3}
+  - {fileID: 21300000, guid: 2733ce1dba6744e46a02860bfb0d8675, type: 3}
 --- !u!212 &21244722
 SpriteRenderer:
   m_ObjectHideFlags: 1

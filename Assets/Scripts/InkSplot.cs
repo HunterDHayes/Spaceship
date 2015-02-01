@@ -49,6 +49,9 @@ public class InkSplot : MonoBehaviour
     // Update is called once per frame
     protected void Update()
     {
+        if (PlayerPrefs.GetInt("Paused") == 1)
+            return;
+
         m_InkTimer -= Time.deltaTime;
 
         if (m_InkTimer <= 0.0f)
@@ -67,14 +70,12 @@ public class InkSplot : MonoBehaviour
         GetInput();
     }
 
-    protected bool GetInput()
+    protected void GetInput()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Destroy(gameObject);
-            return true;
-        }
+        if (PlayerPrefs.GetInt("Paused") == 1)
+            return;
 
-        return false;
+        if (Input.GetMouseButtonDown(0))
+            Destroy(gameObject);
     }
 }

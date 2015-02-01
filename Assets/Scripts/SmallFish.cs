@@ -13,6 +13,11 @@ public class SmallFish : MoveableObject
 
     // Particle
     public ParticleSystem m_ParticleSystemPrefab, m_ParticleSystem;
+
+    // Shark Animation Images
+    public int m_TextureToRender;
+    public float m_AnimationTime, m_AnimationTimer;
+    public Sprite[] m_AnimationTextures;
     #endregion
 
     // Use this for initialization
@@ -47,16 +52,32 @@ public class SmallFish : MoveableObject
     // Update is called once per frame
     override protected void Update()
     {
+        if (PlayerPrefs.GetInt("Paused") == 1)
+            return;
+
         base.Update();
 
         m_ParticleSystem.transform.position = transform.position;
+
+        m_AnimationTimer -= Time.deltaTime;
+
+        if (m_AnimationTimer <= 0.0f)
+        {
+            m_AnimationTimer = m_AnimationTime;
+            m_TextureToRender++;
+
+            if (m_TextureToRender >= m_AnimationTextures.Length)
+                m_TextureToRender = 0;
+
+            GetComponent<SpriteRenderer>().sprite = m_AnimationTextures[m_TextureToRender];
+        }
     }
 
     override protected void OnBecameInvisible()
     {
         base.OnBecameInvisible();
         m_ParticleSystem.Stop();
-        Destroy(m_ParticleSystem, 2.5f);
+        Destroy(m_ParticleSystem, 0.5f);
     }
 
     protected void OnMouseOver()
@@ -64,15 +85,16 @@ public class SmallFish : MoveableObject
         GetInput();
     }
 
-    protected bool GetInput()
+    protected void GetInput()
     {
+        if (PlayerPrefs.GetInt("Paused") == 1)
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
             PlayerPrefs.SetInt("Score", PlayerPrefs.GetInt("Score") + m_ScoreValue);
             Destroy(gameObject);
-            return true;
+            Destroy(m_ParticleSystem);
         }
-
-        return false;
     }
 }

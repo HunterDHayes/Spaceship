@@ -62,6 +62,9 @@ public class Spawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (PlayerPrefs.GetInt("Paused") == 1)
+            return;
+
         for (int i = 0; i < m_SpawnTimers.Length; i++)
         {
             m_SpawnTimers[i] -= Time.deltaTime;

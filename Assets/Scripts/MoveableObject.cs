@@ -36,6 +36,9 @@ public class MoveableObject : MonoBehaviour
     // Update is called once per frame
     virtual protected void Update()
     {
+        if (PlayerPrefs.GetInt("Paused") == 1)
+            return;
+
         //if (!Visible())
         //    DestroyObject(this);
         

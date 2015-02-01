@@ -67,6 +67,11 @@ MonoBehaviour:
   m_ParticleSystemPrefab: {fileID: 19841480, guid: 1a0cd71a7aea9ea45a438dacfba28001,
     type: 2}
   m_ParticleSystem: {fileID: 0}
+  m_TextureToRender: 0
+  m_AnimationTime: .5
+  m_AnimationTimer: 0
+  m_AnimationTextures:
+  - {fileID: 21300000, guid: 1d176e70424dda14f840597cc7a7f1e2, type: 3}
 --- !u!212 &21214330
 SpriteRenderer:
   m_ObjectHideFlags: 1

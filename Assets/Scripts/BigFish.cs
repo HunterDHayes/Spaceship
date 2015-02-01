@@ -10,6 +10,11 @@ public class BigFish : MoveableObject
 
     // Score
     public int m_ScoreValue;
+
+    // Shark Animation Images
+    public int m_TextureToRender;
+    public float m_AnimationTime, m_AnimationTimer;
+    public Sprite[] m_AnimationTextures;
     #endregion
 
     // Use this for initialization
@@ -40,7 +45,23 @@ public class BigFish : MoveableObject
     // Update is called once per frame
     override protected void Update()
     {
+        if (PlayerPrefs.GetInt("Paused") == 1)
+            return;
+
         base.Update();
+
+        m_AnimationTimer -= Time.deltaTime;
+
+        if (m_AnimationTimer <= 0.0f)
+        {
+            m_AnimationTimer = m_AnimationTime;
+            m_TextureToRender++;
+
+            if (m_TextureToRender >= m_AnimationTextures.Length)
+                m_TextureToRender = 0;
+
+            GetComponent<SpriteRenderer>().sprite = m_AnimationTextures[m_TextureToRender];
+        }
     }
 
     override protected void OnBecameInvisible()
@@ -53,15 +74,15 @@ public class BigFish : MoveableObject
         GetInput();
     }
 
-    protected bool GetInput()
+    protected void GetInput()
     {
+        if (PlayerPrefs.GetInt("Paused") == 1)
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
             PlayerPrefs.SetInt("Score", PlayerPrefs.GetInt("Score") + m_ScoreValue);
             Destroy(gameObject);
-            return true;
         }
-
-        return false;
     }
 }

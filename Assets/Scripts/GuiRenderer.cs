@@ -14,8 +14,8 @@ public class GuiRenderer : MonoBehaviour
     public Vector2 m_PreferredScreenSize;
     private Vector2 m_ScreenScale;
 
-    // Score Font Size
-    public Vector2 m_ScoreRenderPosition;
+    // Score
+    public Vector2 m_ScoreBoxRenderPosition, m_ScoreRenderPosition;
     public int m_ScoreFontSize;
 
     // Lives
@@ -30,6 +30,7 @@ public class GuiRenderer : MonoBehaviour
     #endregion
 
     #region GUITextures
+    public Texture m_ScoreBox;
     public Texture[] m_LivesTextures;
     public Texture m_PauseMenuBackground;
     #endregion
@@ -78,9 +79,10 @@ public class GuiRenderer : MonoBehaviour
         #endregion
 
         PlayerPrefs.SetInt("Score", 0);
+        PlayerPrefs.SetInt("Paused", -1);
 
-        //PlayerPrefs.SetFloat("MusicVolume", 100);
-        //PlayerPrefs.SetFloat("SFXVolume", 100);
+        int random = Random.Range(0, m_MusicAudioSources.Length);
+        m_MusicAudioSources[random].Play();
     }
 
     // Update is called once per frame
@@ -107,41 +109,45 @@ public class GuiRenderer : MonoBehaviour
     // Render GUI Elements
     void OnGUI()
     {
-        // Not Paused
-        if (!m_IsPaused)
-        {
-            if (RenderGUIButton(m_PauseButtonPosition.x, m_PauseButtonPosition.y, m_HUD.GetStyle("PauseButton")))
-            {
-                m_IsPaused = true;
-            }
-        }
-        // Paused
-        else
-        {
-            RenderGUITexture(m_PauseMenuPosition.x, m_PauseMenuPosition.y, m_PauseMenuBackground.width / 2, m_PauseMenuBackground.height / 2, m_PauseMenuBackground);
-
-            // Resumes the game
-            if (RenderGUIButton(m_PauseMenuPosition.x + m_ResumeButtonPosition.x, m_PauseMenuPosition.y + m_ResumeButtonPosition.y, 100, 50, "Resume", m_HUD.GetStyle("PauseMenuButton")))
-                m_IsPaused = false;
-
-            // Restart Game
-            if (RenderGUIButton(m_PauseMenuPosition.x + m_RestartButtonPosition.x, m_PauseMenuPosition.y + m_RestartButtonPosition.y, 100, 50, "Restart", m_HUD.GetStyle("PauseMenuButton")))
-                Application.LoadLevel("Gameplay");
-
-            // Exit to Main menu
-            if (RenderGUIButton(m_PauseMenuPosition.x + m_ExitButtonPosition.x, m_PauseMenuPosition.y + m_ExitButtonPosition.y, 100, 50, "Exit Game", m_HUD.GetStyle("PauseMenuButton")))
-                Application.LoadLevel("Main Menu");
-        }
 
         // Lives
         for (int i = 0; i < m_Lives.Length; i++)
         {
-            RenderGUITexture(m_LivesRenderPosition.x + (m_LivesTextures[0].width + m_LivesRenderSpacing) * i, m_LivesRenderPosition.y, (m_Lives[i]) ? m_LivesTextures[0] : m_LivesTextures[1]);
+            RenderGUITexture(m_LivesRenderPosition.x + (m_LivesTextures[0].width * 2 + m_LivesRenderSpacing) * i, m_LivesRenderPosition.y, m_LivesTextures[0].width * 2, m_LivesTextures[0].height * 2, (m_Lives[i]) ? m_LivesTextures[0] : m_LivesTextures[1]);
         }
 
+        // Score Box
+        RenderGUITexture(m_ScoreBoxRenderPosition.x, m_ScoreBoxRenderPosition.y, m_ScoreBox.width * 2, m_ScoreBox.height * 2, m_ScoreBox);
+
         // Score
-        string score = "Score: " + PlayerPrefs.GetInt("Score");
-        RenderGUILabel(m_ScoreRenderPosition.x, m_ScoreRenderPosition.y, score.Length * m_ScoreFontSize, m_ScoreFontSize * 1.5f, score, m_HUD.label);
+        string score = "Score   " + PlayerPrefs.GetInt("Score");
+        RenderGUILabel(m_ScoreBoxRenderPosition.x + m_ScoreRenderPosition.x, m_ScoreBoxRenderPosition.y + m_ScoreRenderPosition.y, m_ScoreBox.width * 2.5f, m_ScoreBox.height * 2, score, m_HUD.label);
+
+        // Not Paused
+        if (PlayerPrefs.GetInt("Paused") == 1)
+        {
+            RenderGUITexture(m_PauseMenuPosition.x, m_PauseMenuPosition.y, m_PauseMenuBackground.width * 2, m_PauseMenuBackground.height * 2, m_PauseMenuBackground);
+
+            // Resumes the game
+            if (RenderGUIButton(m_PauseMenuPosition.x + m_ResumeButtonPosition.x, m_PauseMenuPosition.y + m_ResumeButtonPosition.y,
+                m_HUD.GetStyle("PauseMenuButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuButton").normal.background.height * 2, "Resume", m_HUD.GetStyle("PauseMenuButton")))
+                PlayerPrefs.SetInt("Paused", -1);
+
+            // Restart Game
+            if (RenderGUIButton(m_PauseMenuPosition.x + m_RestartButtonPosition.x, m_PauseMenuPosition.y + m_RestartButtonPosition.y,
+                m_HUD.GetStyle("PauseMenuButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuButton").normal.background.height * 2, "Restart", m_HUD.GetStyle("PauseMenuButton")))
+                Application.LoadLevel("Gameplay");
+
+            // Exit to Main menu
+            if (RenderGUIButton(m_PauseMenuPosition.x + m_ExitButtonPosition.x, m_PauseMenuPosition.y + m_ExitButtonPosition.y,
+                m_HUD.GetStyle("PauseMenuButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuButton").normal.background.height * 2, "Exit Game", m_HUD.GetStyle("PauseMenuButton")))
+                Application.LoadLevel("Main Menu");
+        }
+
+        if (RenderGUIButton(m_PauseButtonPosition.x, m_PauseButtonPosition.y, m_HUD.GetStyle("PauseButton").normal.background.width * 2, m_HUD.GetStyle("PauseButton").normal.background.height * 2, m_HUD.GetStyle("PauseButton")))
+        {
+            PlayerPrefs.SetInt("Paused", 1);
+        }
     }
     #endregion
 
