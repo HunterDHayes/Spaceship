@@ -62,6 +62,9 @@ MonoBehaviour:
   m_WaveMovementScale: 0
   m_IsMovingRight: 1
   m_IsMovingSin: 0
+  m_ParticleColor: {r: .450980395, g: .129411772, b: .0117647061, a: 1}
+  m_DeathParticleSystemPrefab: {fileID: 19801956, guid: e2d3ed25fad647448bb204fd2da0d3c0,
+    type: 2}
   m_SfxAudioClips: []
   m_ScoreValue: 50
   m_TextureToRender: 0

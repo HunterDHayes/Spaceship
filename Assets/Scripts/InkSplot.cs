@@ -49,6 +49,11 @@ public class InkSplot : MonoBehaviour
     // Update is called once per frame
     protected void Update()
     {
+        float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+            m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+     
         if (PlayerPrefs.GetInt("Paused") == 1)
             return;
 

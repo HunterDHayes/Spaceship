@@ -22,14 +22,16 @@ public class GuiRenderer : MonoBehaviour
     public bool[] m_Lives;
     public Vector2 m_LivesRenderPosition;
     public float m_LivesRenderSpacing;
+    public float m_DamageOverlayTime, m_DamageOverlayTimer;
 
     // Pause Menu
     public bool m_IsPaused;
-    public Vector2 m_PauseButtonPosition, m_PauseMenuPosition, m_ResumeButtonPosition, m_RestartButtonPosition, m_ExitButtonPosition;
+    public Vector2 m_PauseButtonPosition, m_PauseMenuPosition, m_ResumeButtonPosition, m_RestartButtonPosition, m_ExitButtonPosition, m_MusicButtonPosition, m_SFXButtonPosition;
     public int m_PauseMenuTextSize;
     #endregion
 
     #region GUITextures
+    public Texture m_DamageOverlay;
     public Texture m_ScoreBox;
     public Texture[] m_LivesTextures;
     public Texture m_PauseMenuBackground;
@@ -95,12 +97,18 @@ public class GuiRenderer : MonoBehaviour
         m_HUD.label.fontSize = (int)(m_ScoreFontSize * m_ScreenScale.y);
         m_HUD.GetStyle("PauseMenuButton").fontSize = (int)(m_PauseMenuTextSize * m_ScreenScale.y);
 
-        // Testing Gaining a Life
-        if (Input.GetKeyUp(KeyCode.O))
-            GainLive();
-        // Testing Losing a Life
-        if (Input.GetKeyUp(KeyCode.P))
-            LoseLive();
+        float fMusicVolume = PlayerPrefs.GetFloat("MusicVolume");
+
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+            m_MusicAudioSources[i].volume = fMusicVolume / 100.0f;
+
+        float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+            m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+
+        if (m_DamageOverlayTimer > 0.0f && PlayerPrefs.GetInt("Paused") == -1)
+            m_DamageOverlayTimer -= Time.deltaTime;
 
         if (!m_Lives[2])
             Application.LoadLevel("End Menu");
@@ -109,12 +117,12 @@ public class GuiRenderer : MonoBehaviour
     // Render GUI Elements
     void OnGUI()
     {
+        if (RenderGUIButton(m_PauseButtonPosition.x, m_PauseButtonPosition.y, m_HUD.GetStyle("PauseButton").normal.background.width * 2, m_HUD.GetStyle("PauseButton").normal.background.height * 2, m_HUD.GetStyle("PauseButton")))
+            PlayerPrefs.SetInt("Paused", 1);
 
         // Lives
         for (int i = 0; i < m_Lives.Length; i++)
-        {
             RenderGUITexture(m_LivesRenderPosition.x + (m_LivesTextures[0].width * 2 + m_LivesRenderSpacing) * i, m_LivesRenderPosition.y, m_LivesTextures[0].width * 2, m_LivesTextures[0].height * 2, (m_Lives[i]) ? m_LivesTextures[0] : m_LivesTextures[1]);
-        }
 
         // Score Box
         RenderGUITexture(m_ScoreBoxRenderPosition.x, m_ScoreBoxRenderPosition.y, m_ScoreBox.width * 2, m_ScoreBox.height * 2, m_ScoreBox);
@@ -122,8 +130,11 @@ public class GuiRenderer : MonoBehaviour
         // Score
         string score = "Score   " + PlayerPrefs.GetInt("Score");
         RenderGUILabel(m_ScoreBoxRenderPosition.x + m_ScoreRenderPosition.x, m_ScoreBoxRenderPosition.y + m_ScoreRenderPosition.y, m_ScoreBox.width * 2.5f, m_ScoreBox.height * 2, score, m_HUD.label);
+        
+        if (m_DamageOverlayTimer > 0.0f && PlayerPrefs.GetInt("Paused") == -1)
+            RenderGUITexture(0, 0, m_PreferredScreenSize.x, m_PreferredScreenSize.y, m_DamageOverlay);
 
-        // Not Paused
+        // Pause Menu
         if (PlayerPrefs.GetInt("Paused") == 1)
         {
             RenderGUITexture(m_PauseMenuPosition.x, m_PauseMenuPosition.y, m_PauseMenuBackground.width * 2, m_PauseMenuBackground.height * 2, m_PauseMenuBackground);
@@ -140,13 +151,36 @@ public class GuiRenderer : MonoBehaviour
 
             // Exit to Main menu
             if (RenderGUIButton(m_PauseMenuPosition.x + m_ExitButtonPosition.x, m_PauseMenuPosition.y + m_ExitButtonPosition.y,
-                m_HUD.GetStyle("PauseMenuButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuButton").normal.background.height * 2, "Exit Game", m_HUD.GetStyle("PauseMenuButton")))
+                m_HUD.GetStyle("PauseMenuExitButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuExitButton").normal.background.height * 2, "Exit", m_HUD.GetStyle("PauseMenuExitButton")))
                 Application.LoadLevel("Main Menu");
-        }
 
-        if (RenderGUIButton(m_PauseButtonPosition.x, m_PauseButtonPosition.y, m_HUD.GetStyle("PauseButton").normal.background.width * 2, m_HUD.GetStyle("PauseButton").normal.background.height * 2, m_HUD.GetStyle("PauseButton")))
-        {
-            PlayerPrefs.SetInt("Paused", 1);
+            // SFX Button
+            if (PlayerPrefs.GetFloat("SFXVolume") == 100.0f)
+            {
+                if (RenderGUIButton(m_PauseMenuPosition.x + m_SFXButtonPosition.x, m_PauseMenuPosition.y + m_SFXButtonPosition.y,
+                m_HUD.GetStyle("PauseMenuSFXOnButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuSFXOnButton").normal.background.height * 2, "", m_HUD.GetStyle("PauseMenuSFXOnButton")))
+                    PlayerPrefs.SetFloat("SFXVolume", 0.0f);
+            }
+            else
+            {
+                if (RenderGUIButton(m_PauseMenuPosition.x + m_SFXButtonPosition.x, m_PauseMenuPosition.y + m_SFXButtonPosition.y,
+                m_HUD.GetStyle("PauseMenuSFXOffButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuSFXOffButton").normal.background.height * 2, "", m_HUD.GetStyle("PauseMenuSFXOffButton")))
+                    PlayerPrefs.SetFloat("SFXVolume", 100.0f);
+            }
+
+            // Music Button
+            if (PlayerPrefs.GetFloat("MusicVolume") == 100.0f)
+            {
+                if (RenderGUIButton(m_PauseMenuPosition.x + m_MusicButtonPosition.x, m_PauseMenuPosition.y + m_MusicButtonPosition.y,
+                m_HUD.GetStyle("PauseMenuMusicOnButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuMusicOnButton").normal.background.height * 2, "", m_HUD.GetStyle("PauseMenuMusicOnButton")))
+                    PlayerPrefs.SetFloat("MusicVolume", 0.0f);
+            }
+            else
+            {
+                if (RenderGUIButton(m_PauseMenuPosition.x + m_MusicButtonPosition.x, m_PauseMenuPosition.y + m_MusicButtonPosition.y,
+                m_HUD.GetStyle("PauseMenuMusicOffButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuMusicOffButton").normal.background.height * 2, "", m_HUD.GetStyle("PauseMenuMusicOffButton")))
+                    PlayerPrefs.SetFloat("MusicVolume", 100.0f);
+            }
         }
     }
     #endregion
@@ -171,6 +205,7 @@ public class GuiRenderer : MonoBehaviour
             if (m_Lives[i])
             {
                 m_Lives[i] = false;
+                m_DamageOverlayTimer = m_DamageOverlayTime;
                 break;
             }
         }

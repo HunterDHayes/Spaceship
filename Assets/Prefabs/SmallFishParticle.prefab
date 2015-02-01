@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 441480}
   - 198: {fileID: 19841480}
   - 199: {fileID: 19941480}
+  - 114: {fileID: 11405372}
   m_Layer: 0
   m_Name: SmallFishParticle
   m_TagString: Untagged
@@ -29,6 +30,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &11405372
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f89c09ea0c163b144b73dbd0f4584f8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_DestroyTime: 5
+  m_DestroyTimer: 0
 --- !u!198 &19841480
 ParticleSystem:
   m_ObjectHideFlags: 1
