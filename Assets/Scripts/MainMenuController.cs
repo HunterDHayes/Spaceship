@@ -2,7 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class MainMenuController : MonoBehaviour {
+public class MainMenuController : MonoBehaviour
+{
     public AudioClip[] m_MusicAudioClips;
     public AudioClip[] m_SfxAudioClips;
     private AudioSource[] m_MusicAudioSources;
@@ -12,9 +13,10 @@ public class MainMenuController : MonoBehaviour {
     public Canvas m_cCredits;
     public Canvas m_cMainMenu;
 
-    
-	// Use this for initialization
-	void Start () {
+
+    // Use this for initialization
+    void Start()
+    {
         m_cMainMenu.gameObject.SetActive(true);
         m_cCredits.gameObject.SetActive(false);
         #region Create Audio Assets
@@ -52,11 +54,12 @@ public class MainMenuController : MonoBehaviour {
             m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
         #endregion
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         if (m_bSFX.getClick())
-            PlayerPrefs.SetFloat("SFXVolume",100);
+            PlayerPrefs.SetFloat("SFXVolume", 100);
         else
             PlayerPrefs.SetFloat("SFXVolume", 0);
 
@@ -65,17 +68,20 @@ public class MainMenuController : MonoBehaviour {
         else
             PlayerPrefs.GetFloat("MusicVolume", 0);
 
-	}
+    }
 
-    public void exitGame() {
+    public void exitGame()
+    {
         Application.Quit();
     }
 
-    public void startGame() {
+    public void startGame()
+    {
         Application.LoadLevel("Gameplay");
     }
 
-    public void creditsMenu() {
+    public void creditsMenu()
+    {
         m_cMainMenu.gameObject.SetActive(false);
         m_cCredits.gameObject.SetActive(true);
     }

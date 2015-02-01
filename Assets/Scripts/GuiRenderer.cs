@@ -79,8 +79,8 @@ public class GuiRenderer : MonoBehaviour
 
         PlayerPrefs.SetInt("Score", 0);
 
-        PlayerPrefs.SetFloat("MusicVolume", 100);
-        PlayerPrefs.SetFloat("SFXVolume", 100);
+        //PlayerPrefs.SetFloat("MusicVolume", 100);
+        //PlayerPrefs.SetFloat("SFXVolume", 100);
     }
 
     // Update is called once per frame

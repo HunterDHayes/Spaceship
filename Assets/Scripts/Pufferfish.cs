@@ -9,7 +9,6 @@ public class Pufferfish : MoveableObject
     private AudioSource[] m_SfxAudioSources;
 
     // Rotation Properties
-    private Transform tran;
     public float m_RotationScale;
     #endregion
 
@@ -36,8 +35,6 @@ public class Pufferfish : MoveableObject
         #endregion
 
         base.Start();
-
-        tran = transform;
     }
 
     // Update is called once per frame
