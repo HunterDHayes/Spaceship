@@ -14,6 +14,7 @@ public class Spawner : MonoBehaviour
     // Properties
     public MoveableObject[] m_MoveableObjects;
     public float m_SpawnRange, m_SpawnPosition;
+    public float[] m_EasyMinSpawnTimes, m_EasyMaxSpawnTimes, m_NormalMinSpawnTimes, m_NormalMaxSpawnTimes, m_HardMinSpawnTimes, m_HardMaxSpawnTimes;
     public float[] m_MinSpawnTimes, m_MaxSpawnTimes, m_SpawnTimers;
     #endregion
 
@@ -55,6 +56,31 @@ public class Spawner : MonoBehaviour
             m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
         #endregion
 
+        switch (PlayerPrefs.GetString("Difficulty"))
+        {
+            case "Hard":
+                {
+                    m_MinSpawnTimes = m_HardMinSpawnTimes;
+                    m_MaxSpawnTimes = m_HardMaxSpawnTimes;
+                    break;
+                }
+            case "Normal":
+                {
+                    m_MinSpawnTimes = m_NormalMinSpawnTimes;
+                    m_MaxSpawnTimes = m_NormalMaxSpawnTimes;
+                    break;
+                }
+            case "Easy":
+            default:
+                {
+                    m_MinSpawnTimes = m_EasyMinSpawnTimes;
+                    m_MaxSpawnTimes = m_EasyMaxSpawnTimes;
+                    break;
+                }
+        }
+
+        m_SpawnTimers = new float[m_MinSpawnTimes.Length];
+
         for (int i = 0; i < m_MinSpawnTimes.Length; i++)
             m_SpawnTimers[i] = Random.Range(m_MinSpawnTimes[i], m_MaxSpawnTimes[i]);
     }
@@ -62,6 +88,16 @@ public class Spawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float fMusicVolume = PlayerPrefs.GetFloat("MusicVolume");
+
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+            m_MusicAudioSources[i].volume = fMusicVolume / 100.0f;
+
+        float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+            m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+     
         if (PlayerPrefs.GetInt("Paused") == 1)
             return;
 

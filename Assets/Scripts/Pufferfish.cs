@@ -45,6 +45,11 @@ public class Pufferfish : MoveableObject
     // Update is called once per frame
     override protected void Update()
     {
+        float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+            m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+     
         if (PlayerPrefs.GetInt("Paused") == 1)
             return;
 
@@ -83,6 +88,12 @@ public class Pufferfish : MoveableObject
 
         if (Input.GetMouseButtonDown(0))
         {
+            ParticleSystem ps = (ParticleSystem)Instantiate(m_DeathParticleSystemPrefab, transform.position, Quaternion.identity);
+            ps.startColor = m_ParticleColor;
+            ps.renderer.sortingOrder = 1;
+            ps.Play();
+            DestroyObject(ps, 1.0f);
+
             GameObject manager = GameObject.FindGameObjectWithTag("MainCamera");
             if (manager)
                 manager.SendMessage("LoseLive");

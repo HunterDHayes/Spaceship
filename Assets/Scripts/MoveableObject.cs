@@ -7,6 +7,10 @@ public class MoveableObject : MonoBehaviour
     // Movement
     public float m_MinMovementSpeed, m_MaxMovementSpeed, m_MovementSpeed, m_YPosition, m_TimeAlive, m_MinWaveMovementScale, m_MaxWaveMovementScale, m_WaveMovementScale;
     public bool m_IsMovingRight, m_IsMovingSin;
+
+    // Death Particle
+    public Color m_ParticleColor;
+    public ParticleSystem m_DeathParticleSystemPrefab;
     #endregion
 
     #region Unity Functions
