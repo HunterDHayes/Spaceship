@@ -176,6 +176,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d548bae03ee2aaf43a0fcd6a0d852913, type: 3}
   - {fileID: 8300000, guid: b5354d67941e31b4c81f6edc863926e9, type: 3}
   - {fileID: 8300000, guid: 8f1ccb498b0bb914f9771806a6432e87, type: 3}
+  - {fileID: 8300000, guid: c66edc4c3e2029f48b6f0148b8b92b0f, type: 3}
   m_PreferredScreenSize: {x: 1280, y: 720}
   m_ScoreBoxRenderPosition: {x: 392, y: 32}
   m_ScoreTextRenderPosition: {x: 0, y: 0}

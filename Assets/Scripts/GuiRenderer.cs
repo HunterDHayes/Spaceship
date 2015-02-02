@@ -131,7 +131,7 @@ public class GuiRenderer : MonoBehaviour
 
         if (!m_Lives[2])
             //Application.LoadLevel("End Menu");
-            m_SceneToChangeTo = 2;
+            m_SceneToChangeTo = 3;
     }
 
     // Render GUI Elements
@@ -260,7 +260,11 @@ public class GuiRenderer : MonoBehaviour
             {
                 m_Lives[i] = false;
                 m_DamageOverlayTimer = m_DamageOverlayTime;
-                m_SfxAudioSources[2].Play();
+
+                if (i < m_Lives.Length - 1)
+                    m_SfxAudioSources[2].Play();
+                else
+                    m_SfxAudioSources[3].Play();
                 break;
             }
         }
