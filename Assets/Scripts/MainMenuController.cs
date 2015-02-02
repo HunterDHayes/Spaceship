@@ -14,11 +14,15 @@ public class MainMenuController : MonoBehaviour
     public Canvas m_cCredits;
     public Canvas m_cMainMenu;
     public Canvas m_cDifficultyMenu;
-
-
+    
+    private float m_fTimer;
+    private int m_iDifficulty; //0 = none 1 = Easy 2 = Normal 3 = Hard
     // Use this for initialization
     void Start()
     {
+        
+        m_fTimer = 0.0f;
+        m_iDifficulty = 0;
         float m_fMusic = PlayerPrefs.GetFloat("MusicVolume");
         float m_fSFX = PlayerPrefs.GetFloat("SFXVolume");
         
@@ -72,6 +76,9 @@ public class MainMenuController : MonoBehaviour
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
             m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
         #endregion
+
+        int random = Random.Range(0, m_MusicAudioSources.Length);
+        m_MusicAudioSources[random].Play();
         
     }
     // Update is called once per frame
@@ -87,6 +94,18 @@ public class MainMenuController : MonoBehaviour
         else
             PlayerPrefs.SetFloat("MusicVolume", 0);
 
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+            m_SfxAudioSources[i].volume = PlayerPrefs.GetFloat("SFXVolume") / 100.0f;
+
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+            m_MusicAudioSources[i].volume = PlayerPrefs.GetFloat("MusicVolume") / 100.0f;
+
+        if (m_iDifficulty != 0)
+        {
+            m_fTimer += Time.deltaTime;
+            if (m_fTimer > .4)
+                Application.LoadLevel("GamePlay");
+        }
     }
 
     /// <summary>
@@ -131,7 +150,7 @@ public class MainMenuController : MonoBehaviour
     /// </summary>
     public void startEasyGame() {
         PlayerPrefs.SetString("Difficulty", "Easy");
-        Application.LoadLevel("GamePlay");
+        m_iDifficulty = 1;
     }
     /// <summary>
     /// Start the game in the normal mode
@@ -139,7 +158,7 @@ public class MainMenuController : MonoBehaviour
     public void startMediumGame()
     {
         PlayerPrefs.SetString("Difficulty", "Medium");
-        Application.LoadLevel("GamePlay");
+        m_iDifficulty = 2;
     }
     /// <summary>
     /// Starts the game in the most difficult mode
@@ -147,6 +166,15 @@ public class MainMenuController : MonoBehaviour
     public void startHardGame()
     {
         PlayerPrefs.SetString("Difficulty", "Hard");
-        Application.LoadLevel("GamePlay");
+        m_iDifficulty = 3;
     }
+
+    public void NormalButtonSound() {
+        m_SfxAudioSources[0].Play();
+    }
+
+    public void BackButtonSound() {
+        m_SfxAudioSources[1].Play();
+    }
+
 }
