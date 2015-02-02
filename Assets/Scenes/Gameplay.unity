@@ -178,7 +178,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8f1ccb498b0bb914f9771806a6432e87, type: 3}
   m_PreferredScreenSize: {x: 1280, y: 720}
   m_ScoreBoxRenderPosition: {x: 392, y: 32}
-  m_ScoreRenderPosition: {x: 32, y: 0}
+  m_ScoreTextRenderPosition: {x: 0, y: 0}
+  m_ScoreRenderPosition: {x: 216, y: 0}
   m_ScoreFontSize: 30
   m_Lives: 010101
   m_LivesRenderPosition: {x: 984, y: 32}
@@ -302,30 +303,30 @@ MonoBehaviour:
   - 2
   - 6
   - 15
+  - 4
   - 8
-  - 12
-  - 15
+  - 10
   m_NormalMaxSpawnTimes:
   - 6
   - 10
   - 20
+  - 8
   - 10
   - 15
-  - 20
   m_HardMinSpawnTimes:
   - 2
   - 6
   - 15
-  - 6
-  - 10
-  - 12
+  - 2
+  - 4
+  - 5
   m_HardMaxSpawnTimes:
   - 6
   - 10
   - 20
+  - 4
+  - 5
   - 8
-  - 12
-  - 15
   m_MinSpawnTimes: []
   m_MaxSpawnTimes: []
   m_SpawnTimers: []

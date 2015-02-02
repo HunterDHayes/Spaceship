@@ -15,7 +15,7 @@ public class GuiRenderer : MonoBehaviour
     private Vector2 m_ScreenScale;
 
     // Score
-    public Vector2 m_ScoreBoxRenderPosition, m_ScoreRenderPosition;
+    public Vector2 m_ScoreBoxRenderPosition, m_ScoreTextRenderPosition, m_ScoreRenderPosition;
     public int m_ScoreFontSize;
 
     // Lives
@@ -99,6 +99,7 @@ public class GuiRenderer : MonoBehaviour
         // Change Font Sizes
         m_HUD.label.fontSize = (int)(m_ScoreFontSize * m_ScreenScale.y);
         m_HUD.GetStyle("PauseMenuButton").fontSize = (int)(m_PauseMenuTextSize * m_ScreenScale.y);
+        m_HUD.GetStyle("PauseMenuExitButton").fontSize = (int)(m_PauseMenuTextSize * m_ScreenScale.y);
 
         float fMusicVolume = PlayerPrefs.GetFloat("MusicVolume");
 
@@ -150,8 +151,11 @@ public class GuiRenderer : MonoBehaviour
         RenderGUITexture(m_ScoreBoxRenderPosition.x, m_ScoreBoxRenderPosition.y, m_ScoreBox.width * 2, m_ScoreBox.height * 2, m_ScoreBox);
 
         // Score
-        string score = "Score   " + PlayerPrefs.GetInt("Score");
-        RenderGUILabel(m_ScoreBoxRenderPosition.x + m_ScoreRenderPosition.x, m_ScoreBoxRenderPosition.y + m_ScoreRenderPosition.y, m_ScoreBox.width * 2.5f, m_ScoreBox.height * 2, score, m_HUD.label);
+        string score = "" + PlayerPrefs.GetInt("Score");
+        RenderGUILabel(m_ScoreBoxRenderPosition.x + m_ScoreTextRenderPosition.x, m_ScoreBoxRenderPosition.y + m_ScoreTextRenderPosition.y, 208, 80, "Score", m_HUD.label);
+        RenderGUILabel(m_ScoreBoxRenderPosition.x + m_ScoreRenderPosition.x, m_ScoreBoxRenderPosition.y + m_ScoreRenderPosition.y, 276, 80, score, m_HUD.label);
+
+        // 120 x
         
         if (m_DamageOverlayTimer > 0.0f && PlayerPrefs.GetInt("Paused") == -1)
             RenderGUITexture(0, 0, m_PreferredScreenSize.x, m_PreferredScreenSize.y, m_DamageOverlay);
@@ -179,7 +183,7 @@ public class GuiRenderer : MonoBehaviour
 
             // Exit to Main menu
             if (RenderGUIButton(m_PauseMenuPosition.x + m_ExitButtonPosition.x, m_PauseMenuPosition.y + m_ExitButtonPosition.y,
-                m_HUD.GetStyle("PauseMenuExitButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuExitButton").normal.background.height * 2, "Exit", m_HUD.GetStyle("PauseMenuExitButton")))
+                m_HUD.GetStyle("PauseMenuExitButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuExitButton").normal.background.height * 2, "Menu", m_HUD.GetStyle("PauseMenuExitButton")))
             {
                 //Application.LoadLevel("Main Menu");
                 m_SceneToChangeTo = 2;
