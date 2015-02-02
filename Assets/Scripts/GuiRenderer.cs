@@ -137,11 +137,6 @@ public class GuiRenderer : MonoBehaviour
     // Render GUI Elements
     void OnGUI()
     {
-        if (RenderGUIButton(m_PauseButtonPosition.x, m_PauseButtonPosition.y, m_HUD.GetStyle("PauseButton").normal.background.width * 2, m_HUD.GetStyle("PauseButton").normal.background.height * 2, m_HUD.GetStyle("PauseButton")))
-        {
-            PlayerPrefs.SetInt("Paused", 1);
-            m_SfxAudioSources[0].Play();
-        }
 
         // Lives
         for (int i = 0; i < m_Lives.Length; i++)
@@ -160,9 +155,19 @@ public class GuiRenderer : MonoBehaviour
         if (m_DamageOverlayTimer > 0.0f && PlayerPrefs.GetInt("Paused") == -1)
             RenderGUITexture(0, 0, m_PreferredScreenSize.x, m_PreferredScreenSize.y, m_DamageOverlay);
 
+        if (PlayerPrefs.GetInt("Paused") == -1)
+        {
+            if (RenderGUIButton(m_PauseButtonPosition.x, m_PauseButtonPosition.y, m_HUD.GetStyle("PauseButton").normal.background.width * 2, m_HUD.GetStyle("PauseButton").normal.background.height * 2, m_HUD.GetStyle("PauseButton")))
+            {
+                m_SfxAudioSources[0].Play();
+                PlayerPrefs.SetInt("Paused", 1);
+            }
+        }
+
         // Pause Menu
         if (PlayerPrefs.GetInt("Paused") == 1)
         {
+            RenderGUITexture(m_PauseButtonPosition.x, m_PauseButtonPosition.y, m_HUD.GetStyle("PauseButton").normal.background.width * 2, m_HUD.GetStyle("PauseButton").normal.background.height * 2, m_HUD.GetStyle("PauseButton").normal.background);
             RenderGUITexture(m_PauseMenuPosition.x, m_PauseMenuPosition.y, m_PauseMenuBackground.width * 2, m_PauseMenuBackground.height * 2, m_PauseMenuBackground);
 
             // Resumes the game
