@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
+
     public AudioClip[] m_MusicAudioClips;
     public AudioClip[] m_SfxAudioClips;
     private AudioSource[] m_MusicAudioSources;
@@ -18,9 +19,24 @@ public class MainMenuController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        float m_fMusic = PlayerPrefs.GetFloat("MusicVolume");
+        float m_fSFX = PlayerPrefs.GetFloat("SFXVolume");
+        
+        if (m_fMusic < 50)
+            m_bMusic.setClick(false);
+        else 
+            m_bMusic.setClick(true);
+        
+        if (m_fSFX < 50)
+            m_bSFX.setClick(false);
+        else 
+            m_bSFX.setClick(true);
+
         m_cMainMenu.gameObject.SetActive(true);
         m_cCredits.gameObject.SetActive(false);
         m_cDifficultyMenu.gameObject.SetActive(false);
+        
+        
         #region Create Audio Assets
         m_MusicAudioSources = new AudioSource[m_MusicAudioClips.Length];
 
@@ -33,6 +49,7 @@ public class MainMenuController : MonoBehaviour
             m_MusicAudioSources[i].clip = m_MusicAudioClips[i];
             m_MusicAudioSources[i].loop = true;
         }
+
 
         m_SfxAudioSources = new AudioSource[m_SfxAudioClips.Length];
 
@@ -55,8 +72,8 @@ public class MainMenuController : MonoBehaviour
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
             m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
         #endregion
+        
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -66,9 +83,9 @@ public class MainMenuController : MonoBehaviour
             PlayerPrefs.SetFloat("SFXVolume", 0);
 
         if (m_bMusic.getClick())
-            PlayerPrefs.GetFloat("MusicVolume", 100);
+            PlayerPrefs.SetFloat("MusicVolume", 100);
         else
-            PlayerPrefs.GetFloat("MusicVolume", 0);
+            PlayerPrefs.SetFloat("MusicVolume", 0);
 
     }
 
@@ -109,17 +126,24 @@ public class MainMenuController : MonoBehaviour
         m_cDifficultyMenu.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Start the game in the easiest mode
+    /// </summary>
     public void startEasyGame() {
         PlayerPrefs.SetString("Difficulty", "Easy");
         Application.LoadLevel("GamePlay");
     }
-
+    /// <summary>
+    /// Start the game in the normal mode
+    /// </summary>
     public void startMediumGame()
     {
         PlayerPrefs.SetString("Difficulty", "Medium");
         Application.LoadLevel("GamePlay");
     }
-
+    /// <summary>
+    /// Starts the game in the most difficult mode
+    /// </summary>
     public void startHardGame()
     {
         PlayerPrefs.SetString("Difficulty", "Hard");

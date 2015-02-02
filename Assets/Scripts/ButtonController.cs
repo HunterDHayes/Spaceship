@@ -10,7 +10,7 @@ public class ButtonController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        m_bClicked = true;
+        //m_bClicked = true;
     }
 
     // Update is called once per frame
@@ -36,4 +36,7 @@ public class ButtonController : MonoBehaviour
         return m_bClicked;
     }
 
+    public void setClick(bool click) {
+        m_bClicked = click;
+    }
 }
