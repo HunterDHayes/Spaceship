@@ -14,13 +14,13 @@ public class MainMenuController : MonoBehaviour
     public Canvas m_cCredits;
     public Canvas m_cMainMenu;
     public Canvas m_cDifficultyMenu;
-    
+
+    private int m_RandomMusic;
     private float m_fTimer;
     private int m_iDifficulty; //0 = none 1 = Easy 2 = Normal 3 = Hard
     // Use this for initialization
     void Start()
-    {
-        
+    {        
         m_fTimer = 0.0f;
         m_iDifficulty = 0;
         float m_fMusic = PlayerPrefs.GetFloat("MusicVolume");
@@ -77,8 +77,8 @@ public class MainMenuController : MonoBehaviour
             m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
         #endregion
 
-        int random = Random.Range(0, m_MusicAudioSources.Length);
-        m_MusicAudioSources[random].Play();
+        m_SfxAudioSources[2].Play();
+        m_RandomMusic = Random.Range(0, m_MusicAudioSources.Length);
         
     }
     // Update is called once per frame
@@ -95,7 +95,8 @@ public class MainMenuController : MonoBehaviour
             PlayerPrefs.SetFloat("MusicVolume", 0);
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
-            m_SfxAudioSources[i].volume = PlayerPrefs.GetFloat("SFXVolume") / 100.0f;
+            if (!m_SfxAudioSources[i].isPlaying)
+                m_SfxAudioSources[i].volume = PlayerPrefs.GetFloat("SFXVolume") / 100.0f;
 
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
             m_MusicAudioSources[i].volume = PlayerPrefs.GetFloat("MusicVolume") / 100.0f;
@@ -106,6 +107,12 @@ public class MainMenuController : MonoBehaviour
             if (m_fTimer > .4)
                 Application.LoadLevel("GamePlay");
         }
+
+        if (!m_SfxAudioSources[2].isPlaying && !m_MusicAudioSources[m_RandomMusic].isPlaying)
+            m_MusicAudioSources[m_RandomMusic].Play();
+
+        if (Input.GetKeyUp(KeyCode.Escape))
+            Application.Quit();
     }
 
     /// <summary>

@@ -730,7 +730,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &299401605
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1491,6 +1491,18 @@ MonoBehaviour:
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: ClickEvent
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 1214174049}
+          m_MethodName: BackButtonSound
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+              Culture=neutral, PublicKeyToken=null
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
       m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
@@ -2769,6 +2781,7 @@ MonoBehaviour:
   m_SfxAudioClips:
   - {fileID: 8300000, guid: d548bae03ee2aaf43a0fcd6a0d852913, type: 3}
   - {fileID: 8300000, guid: b5354d67941e31b4c81f6edc863926e9, type: 3}
+  - {fileID: 8300000, guid: ab571f8be667841488eccb6048d61516, type: 3}
   m_bMusic: {fileID: 1598234075}
   m_bSFX: {fileID: 818925713}
   m_cCredits: {fileID: 1065853924}
