@@ -10,6 +10,8 @@ TagManager:
   - Squid
   - InkSplot
   - Crab
+  - GUIRenderer
+  - SoundManager
   - 
   Builtin Layer 0: Default
   Builtin Layer 1: TransparentFX

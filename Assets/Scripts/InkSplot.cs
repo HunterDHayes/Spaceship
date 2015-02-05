@@ -29,10 +29,10 @@ public class InkSplot : MonoBehaviour
             m_SfxAudioSources[i].loop = false;
         }
 
-        float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+        float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
-            m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+            m_SfxAudioSources[i].volume = fSfxVolume / 100.0f;
         #endregion
 
         m_SfxAudioSources[0].Play();
@@ -49,10 +49,10 @@ public class InkSplot : MonoBehaviour
     // Update is called once per frame
     protected void Update()
     {
-        float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+        float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
-            m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+            m_SfxAudioSources[i].volume = fSfxVolume / 100.0f;
      
         if (PlayerPrefs.GetInt("Paused") == 1)
             return;

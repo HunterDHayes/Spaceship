@@ -36,10 +36,10 @@ public class BigFish : MoveableObject
             m_SfxAudioSources[i].loop = false;
         }
 
-        float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+        float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
-            m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+            m_SfxAudioSources[i].volume = fSfxVolume / 100.0f;
         #endregion
 
         base.Start();
@@ -48,12 +48,12 @@ public class BigFish : MoveableObject
     // Update is called once per frame
     override protected void Update()
     {
-        float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+        float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
 
         bool destroy = true;
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
         {
-            m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+            m_SfxAudioSources[i].volume = fSfxVolume / 100.0f;
 
             if (m_SfxAudioSources[i].isPlaying)
                 destroy = false;

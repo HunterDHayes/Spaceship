@@ -10,7 +10,7 @@ public class MainMenuController : MonoBehaviour
     private AudioSource[] m_MusicAudioSources;
     private AudioSource[] m_SfxAudioSources;
     public ButtonController m_bMusic;
-    public ButtonController m_bSFX;
+    public ButtonController m_bSfx;
     public Canvas m_cCredits;
     public Canvas m_cMainMenu;
     public Canvas m_cDifficultyMenu;
@@ -23,18 +23,26 @@ public class MainMenuController : MonoBehaviour
     {        
         m_fTimer = 0.0f;
         m_iDifficulty = 0;
+
+        if (PlayerPrefs.GetInt("FirstTimePlaying") == 0)
+        {
+            PlayerPrefs.SetFloat("MusicVolume", 100.0f);
+            PlayerPrefs.SetFloat("SfxVolume", 100.0f);
+            PlayerPrefs.SetInt("FirstTimePlaying", 1);
+        }
+
         float m_fMusic = PlayerPrefs.GetFloat("MusicVolume");
-        float m_fSFX = PlayerPrefs.GetFloat("SFXVolume");
+        float m_fSfx = PlayerPrefs.GetFloat("SfxVolume");
         
         if (m_fMusic < 50)
             m_bMusic.setClick(false);
         else 
             m_bMusic.setClick(true);
         
-        if (m_fSFX < 50)
-            m_bSFX.setClick(false);
+        if (m_fSfx < 50)
+            m_bSfx.setClick(false);
         else 
-            m_bSFX.setClick(true);
+            m_bSfx.setClick(true);
 
         m_cMainMenu.gameObject.SetActive(true);
         m_cCredits.gameObject.SetActive(false);
@@ -68,13 +76,13 @@ public class MainMenuController : MonoBehaviour
         }
 
         float fMusicVolume = PlayerPrefs.GetFloat("MusicVolume");
-        float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+        float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
 
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
             m_MusicAudioSources[i].volume = fMusicVolume / 100.0f;
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
-            m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+            m_SfxAudioSources[i].volume = fSfxVolume / 100.0f;
         #endregion
 
         m_SfxAudioSources[2].Play();
@@ -84,10 +92,10 @@ public class MainMenuController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_bSFX.getClick())
-            PlayerPrefs.SetFloat("SFXVolume", 100);
+        if (m_bSfx.getClick())
+            PlayerPrefs.SetFloat("SfxVolume", 100);
         else
-            PlayerPrefs.SetFloat("SFXVolume", 0);
+            PlayerPrefs.SetFloat("SfxVolume", 0);
 
         if (m_bMusic.getClick())
             PlayerPrefs.SetFloat("MusicVolume", 100);
@@ -96,7 +104,7 @@ public class MainMenuController : MonoBehaviour
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
             if (!m_SfxAudioSources[i].isPlaying)
-                m_SfxAudioSources[i].volume = PlayerPrefs.GetFloat("SFXVolume") / 100.0f;
+                m_SfxAudioSources[i].volume = PlayerPrefs.GetFloat("SfxVolume") / 100.0f;
 
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
             m_MusicAudioSources[i].volume = PlayerPrefs.GetFloat("MusicVolume") / 100.0f;

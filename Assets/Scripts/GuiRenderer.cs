@@ -26,7 +26,7 @@ public class GuiRenderer : MonoBehaviour
 
     // Pause Menu
     public bool m_IsPaused;
-    public Vector2 m_PauseButtonPosition, m_PauseMenuPosition, m_ResumeButtonPosition, m_RestartButtonPosition, m_ExitButtonPosition, m_MusicButtonPosition, m_SFXButtonPosition;
+    public Vector2 m_PauseButtonPosition, m_PauseMenuPosition, m_ResumeButtonPosition, m_RestartButtonPosition, m_ExitButtonPosition, m_MusicButtonPosition, m_SfxButtonPosition;
     public int m_PauseMenuTextSize;
 
     // Changing Scenes
@@ -74,13 +74,13 @@ public class GuiRenderer : MonoBehaviour
         }
 
         float fMusicVolume = PlayerPrefs.GetFloat("MusicVolume");
-        float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+        float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
 
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
             m_MusicAudioSources[i].volume = fMusicVolume / 100.0f;
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
-            m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+            m_SfxAudioSources[i].volume = fSfxVolume / 100.0f;
         #endregion
 
         PlayerPrefs.SetInt("Score", 0);
@@ -106,12 +106,12 @@ public class GuiRenderer : MonoBehaviour
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
             m_MusicAudioSources[i].volume = fMusicVolume / 100.0f;
 
-        float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+        float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
 
         bool _ChangeScene = true;
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
             if(!m_SfxAudioSources[i].isPlaying)
-                m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+                m_SfxAudioSources[i].volume = fSfxVolume / 100.0f;
             else
                 _ChangeScene = false;
 
@@ -159,8 +159,12 @@ public class GuiRenderer : MonoBehaviour
         {
             if (RenderGUIButton(m_PauseButtonPosition.x, m_PauseButtonPosition.y, m_HUD.GetStyle("PauseButton").normal.background.width * 2, m_HUD.GetStyle("PauseButton").normal.background.height * 2, m_HUD.GetStyle("PauseButton")))
             {
-                m_SfxAudioSources[0].Play();
+                //m_SfxAudioSources[0].Play();
                 PlayerPrefs.SetInt("Paused", 1);
+
+                GameObject soundManager = GameObject.FindGameObjectWithTag("SoundManager");
+                if (soundManager)
+                    soundManager.SendMessage("PlaySfx", "ButtonClick");
             }
         }
 
@@ -195,27 +199,27 @@ public class GuiRenderer : MonoBehaviour
                 m_SfxAudioSources[1].Play();
             }
 
-            // SFX Button
-            if (PlayerPrefs.GetFloat("SFXVolume") == 100.0f)
+            // Sfx Button
+            if (PlayerPrefs.GetFloat("SfxVolume") == 100.0f)
             {
-                if (RenderGUIButton(m_PauseMenuPosition.x + m_SFXButtonPosition.x, m_PauseMenuPosition.y + m_SFXButtonPosition.y,
-                m_HUD.GetStyle("PauseMenuSFXOnButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuSFXOnButton").normal.background.height * 2, "", m_HUD.GetStyle("PauseMenuSFXOnButton")))
+                if (RenderGUIButton(m_PauseMenuPosition.x + m_SfxButtonPosition.x, m_PauseMenuPosition.y + m_SfxButtonPosition.y,
+                m_HUD.GetStyle("PauseMenuSfxOnButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuSfxOnButton").normal.background.height * 2, "", m_HUD.GetStyle("PauseMenuSfxOnButton")))
                 {
                     m_SfxAudioSources[1].Play();
-                    PlayerPrefs.SetFloat("SFXVolume", 0.0f);
+                    PlayerPrefs.SetFloat("SfxVolume", 0.0f);
                 }
             }
             else
             {
-                if (RenderGUIButton(m_PauseMenuPosition.x + m_SFXButtonPosition.x, m_PauseMenuPosition.y + m_SFXButtonPosition.y,
-                m_HUD.GetStyle("PauseMenuSFXOffButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuSFXOffButton").normal.background.height * 2, "", m_HUD.GetStyle("PauseMenuSFXOffButton")))
+                if (RenderGUIButton(m_PauseMenuPosition.x + m_SfxButtonPosition.x, m_PauseMenuPosition.y + m_SfxButtonPosition.y,
+                m_HUD.GetStyle("PauseMenuSfxOffButton").normal.background.width * 2, m_HUD.GetStyle("PauseMenuSfxOffButton").normal.background.height * 2, "", m_HUD.GetStyle("PauseMenuSfxOffButton")))
                 {
-                    PlayerPrefs.SetFloat("SFXVolume", 100.0f);
+                    PlayerPrefs.SetFloat("SfxVolume", 100.0f);
 
-                    float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+                    float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
 
                     for (int i = 0; i < m_SfxAudioSources.Length; i++)
-                        m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+                        m_SfxAudioSources[i].volume = fSfxVolume / 100.0f;
 
                     m_SfxAudioSources[0].Play();
                 }

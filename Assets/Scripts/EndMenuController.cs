@@ -47,13 +47,13 @@ public class EndMenuController : MonoBehaviour {
         }
 
         float fMusicVolume = PlayerPrefs.GetFloat("MusicVolume");
-        float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+        float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
 
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
             m_MusicAudioSources[i].volume = fMusicVolume / 100.0f;
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
-            m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+            m_SfxAudioSources[i].volume = fSfxVolume / 100.0f;
         #endregion
 
         int random = Random.Range(0, m_MusicAudioSources.Length);
@@ -63,7 +63,7 @@ public class EndMenuController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
-            m_SfxAudioSources[i].volume = PlayerPrefs.GetFloat("SFXVolume") / 100.0f;
+            m_SfxAudioSources[i].volume = PlayerPrefs.GetFloat("SfxVolume") / 100.0f;
 
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
             m_MusicAudioSources[i].volume = PlayerPrefs.GetFloat("MusicVolume") / 100.0f;

@@ -47,13 +47,13 @@ public class Spawner : MonoBehaviour
         }
 
         float fMusicVolume = PlayerPrefs.GetFloat("MusicVolume");
-        float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+        float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
 
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
             m_MusicAudioSources[i].volume = fMusicVolume / 100.0f;
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
-            m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+            m_SfxAudioSources[i].volume = fSfxVolume / 100.0f;
         #endregion
 
         switch (PlayerPrefs.GetString("Difficulty"))
@@ -93,10 +93,10 @@ public class Spawner : MonoBehaviour
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
             m_MusicAudioSources[i].volume = fMusicVolume / 100.0f;
 
-        float fSFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+        float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
-            m_SfxAudioSources[i].volume = fSFXVolume / 100.0f;
+            m_SfxAudioSources[i].volume = fSfxVolume / 100.0f;
      
         if (PlayerPrefs.GetInt("Paused") == 1)
             return;

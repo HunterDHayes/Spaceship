@@ -86,7 +86,6 @@ GameObject:
   - 92: {fileID: 27829337}
   - 124: {fileID: 27829336}
   - 81: {fileID: 27829335}
-  - 114: {fileID: 27829340}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -159,51 +158,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &27829340
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 27829334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1eaf8b9b8763c7c4f9a9e02bbdff79ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MusicAudioClips:
-  - {fileID: 8300000, guid: 759a65bba91a93e4ea9fc7a454e20486, type: 3}
-  m_SfxAudioClips:
-  - {fileID: 8300000, guid: d548bae03ee2aaf43a0fcd6a0d852913, type: 3}
-  - {fileID: 8300000, guid: b5354d67941e31b4c81f6edc863926e9, type: 3}
-  - {fileID: 8300000, guid: 8f1ccb498b0bb914f9771806a6432e87, type: 3}
-  - {fileID: 8300000, guid: c66edc4c3e2029f48b6f0148b8b92b0f, type: 3}
-  m_PreferredScreenSize: {x: 1280, y: 720}
-  m_ScoreBoxRenderPosition: {x: 392, y: 32}
-  m_ScoreTextRenderPosition: {x: 0, y: 0}
-  m_ScoreRenderPosition: {x: 216, y: 0}
-  m_ScoreFontSize: 30
-  m_Lives: 010101
-  m_LivesRenderPosition: {x: 984, y: 32}
-  m_LivesRenderSpacing: 8
-  m_DamageOverlayTime: .25
-  m_DamageOverlayTimer: 0
-  m_IsPaused: 0
-  m_PauseButtonPosition: {x: 32, y: 32}
-  m_PauseMenuPosition: {x: 0, y: 0}
-  m_ResumeButtonPosition: {x: 442, y: 200}
-  m_RestartButtonPosition: {x: 442, y: 350}
-  m_ExitButtonPosition: {x: 404, y: 500}
-  m_MusicButtonPosition: {x: 768, y: 500}
-  m_SFXButtonPosition: {x: 640, y: 500}
-  m_PauseMenuTextSize: 36
-  m_DamageOverlay: {fileID: 2800000, guid: 725458ac38d48b74ebb1978d90c016b4, type: 3}
-  m_ScoreBox: {fileID: 2800000, guid: 31a58293e4242e04896125a639ad2646, type: 3}
-  m_LivesTextures:
-  - {fileID: 2800000, guid: 22532b39b78c1274fb406c1fb1bc2179, type: 3}
-  - {fileID: 2800000, guid: 86faad1fdf180d94db42bbe4766e113e, type: 3}
-  m_PauseMenuBackground: {fileID: 2800000, guid: 96e7e5929a9ef3d4ab5cc15d4d88f499,
-    type: 3}
-  m_HUD: {fileID: 11400000, guid: a5a33f88dad52d74b9d43512133067ea, type: 2}
 --- !u!1001 &409645342
 Prefab:
   m_ObjectHideFlags: 0
@@ -248,6 +202,136 @@ Prefab:
   m_RootGameObject: {fileID: 1299299239}
   m_IsPrefabParent: 0
   m_IsExploded: 1
+--- !u!1 &631914801
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 631914803}
+  - 114: {fileID: 631914802}
+  m_Layer: 0
+  m_Name: GUI Renderer
+  m_TagString: GUIRenderer
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &631914802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 631914801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eaf8b9b8763c7c4f9a9e02bbdff79ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MusicAudioClips:
+  - {fileID: 8300000, guid: 759a65bba91a93e4ea9fc7a454e20486, type: 3}
+  m_SfxAudioClips:
+  - {fileID: 8300000, guid: d548bae03ee2aaf43a0fcd6a0d852913, type: 3}
+  - {fileID: 8300000, guid: b5354d67941e31b4c81f6edc863926e9, type: 3}
+  - {fileID: 8300000, guid: 8f1ccb498b0bb914f9771806a6432e87, type: 3}
+  - {fileID: 8300000, guid: c66edc4c3e2029f48b6f0148b8b92b0f, type: 3}
+  m_PreferredScreenSize: {x: 1280, y: 720}
+  m_ScoreBoxRenderPosition: {x: 392, y: 32}
+  m_ScoreTextRenderPosition: {x: 0, y: 0}
+  m_ScoreRenderPosition: {x: 216, y: 0}
+  m_ScoreFontSize: 30
+  m_Lives: 010101
+  m_LivesRenderPosition: {x: 984, y: 32}
+  m_LivesRenderSpacing: 8
+  m_DamageOverlayTime: .25
+  m_DamageOverlayTimer: 0
+  m_IsPaused: 0
+  m_PauseButtonPosition: {x: 32, y: 32}
+  m_PauseMenuPosition: {x: 0, y: 0}
+  m_ResumeButtonPosition: {x: 442, y: 200}
+  m_RestartButtonPosition: {x: 442, y: 350}
+  m_ExitButtonPosition: {x: 404, y: 500}
+  m_MusicButtonPosition: {x: 768, y: 500}
+  m_SFXButtonPosition: {x: 640, y: 500}
+  m_PauseMenuTextSize: 36
+  m_DamageOverlay: {fileID: 2800000, guid: 725458ac38d48b74ebb1978d90c016b4, type: 3}
+  m_ScoreBox: {fileID: 2800000, guid: 31a58293e4242e04896125a639ad2646, type: 3}
+  m_LivesTextures:
+  - {fileID: 2800000, guid: 22532b39b78c1274fb406c1fb1bc2179, type: 3}
+  - {fileID: 2800000, guid: 86faad1fdf180d94db42bbe4766e113e, type: 3}
+  m_PauseMenuBackground: {fileID: 2800000, guid: 96e7e5929a9ef3d4ab5cc15d4d88f499,
+    type: 3}
+  m_HUD: {fileID: 11400000, guid: a5a33f88dad52d74b9d43512133067ea, type: 2}
+--- !u!4 &631914803
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 631914801}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+--- !u!1 &1009837904
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1009837906}
+  - 114: {fileID: 1009837905}
+  m_Layer: 0
+  m_Name: Sound Manager
+  m_TagString: SoundManager
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1009837905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1009837904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87808c3f19f18fa45bc625769868ffd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_GamePrefix: SF
+  m_MusicPrefix: BGM
+  m_SfxPrefix: SFX
+  m_MusicAudioClips:
+  - {fileID: 8300000, guid: 759a65bba91a93e4ea9fc7a454e20486, type: 3}
+  m_SfxAudioClips:
+  - {fileID: 8300000, guid: b5354d67941e31b4c81f6edc863926e9, type: 3}
+  - {fileID: 8300000, guid: d548bae03ee2aaf43a0fcd6a0d852913, type: 3}
+  - {fileID: 8300000, guid: c66edc4c3e2029f48b6f0148b8b92b0f, type: 3}
+  - {fileID: 8300000, guid: 77d4279931e49384d8b4a5a1b3644ef1, type: 3}
+  - {fileID: 8300000, guid: b1aa105fb4231fc4d8cdf01b1df3f87d, type: 3}
+  - {fileID: 8300000, guid: 947d0bfdf680c7544bcd5a26699a6a05, type: 3}
+  - {fileID: 8300000, guid: 8f1ccb498b0bb914f9771806a6432e87, type: 3}
+  - {fileID: 8300000, guid: 930d5866ab3f51f4496dcc1e66d3f398, type: 3}
+  - {fileID: 8300000, guid: dcb346d2eff9b2945b033fad3cac5fff, type: 3}
+  - {fileID: 8300000, guid: bb95003182c82e542842660eca1b824d, type: 3}
+  - {fileID: 8300000, guid: f7a4dd9c610a3ac4e8843bd5b045cb17, type: 3}
+  - {fileID: 8300000, guid: 2cb0b7b577198014b966aee5e7ba00d4, type: 3}
+--- !u!4 &1009837906
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1009837904}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
 --- !u!1 &1185300535
 GameObject:
   m_ObjectHideFlags: 0
