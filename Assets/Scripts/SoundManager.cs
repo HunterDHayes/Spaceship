@@ -7,17 +7,40 @@ public class SoundManager : MonoBehaviour
     // Prefixes for Audio
     public string m_GamePrefix, m_MusicPrefix, m_SfxPrefix;
 
+    // Audio Volume
+    public bool m_UseDefaultValuesAlways;
+    public float m_DefaultMusicVolume, m_DefaultSfxVolume;
+
     // Audio
     public AudioClip[] m_MusicAudioClips;
     public AudioClip[] m_SfxAudioClips;
     private AudioSource[] m_MusicAudioSources;
     private AudioSource[] m_SfxAudioSources;
+
+    // Needed for Pause and Resume
+    private float[] m_MusicPauseTimes;
+    private float[] m_SfxPauseTimes;
     #endregion
 
     #region Unity Functions
-    // Use this for initialization
+    /// <summary>
+    /// Used to initialize the Sound Manager
+    /// All music and sound effects are set to default values
+    /// </summary>
     void Start()
     {
+        // First Half of if statement //
+        // If first time playing, sets the default volume values of music and sound effects 
+        // Second Half of if statement //
+        // If true, sets the default volume of music and sound effects all the time 
+        if (PlayerPrefs.GetInt("FirstTimePlaying") == 0 || m_UseDefaultValuesAlways)
+        {
+            PlayerPrefs.SetFloat("MusicVolume", m_DefaultMusicVolume);
+            PlayerPrefs.SetFloat("SFXVolume", m_DefaultSfxVolume);
+            PlayerPrefs.SetInt("FirstTimePlaying", 1);
+        }
+
+        // Create all the audio sources for the game to play audio
         #region Create Audio Assets
         float fMusicVolume = PlayerPrefs.GetFloat("MusicVolume");
         float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
@@ -50,11 +73,23 @@ public class SoundManager : MonoBehaviour
             m_SfxAudioSources[i].name = m_SfxAudioClips[i].name;
         }
         #endregion
-    }
 
-    // Update is called once per frame
+        // Init pause times to -1 for apuse and resume
+        m_MusicPauseTimes = new float[m_MusicAudioSources.Length];
+        m_SfxPauseTimes = new float[m_SfxAudioSources.Length];
+
+        for (int i = 0; i < m_MusicPauseTimes.Length; i++)
+            m_MusicPauseTimes[i] = -1;
+
+        for (int i = 0; i < m_MusicPauseTimes.Length; i++)
+            m_MusicPauseTimes[i] = -1;
+    }
+    /// <summary>
+    /// Updates the Sound Manager
+    /// </summary>
     void Update()
     {
+        /*
         float fMusicVolume = PlayerPrefs.GetFloat("MusicVolume");
         float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
 
@@ -63,13 +98,17 @@ public class SoundManager : MonoBehaviour
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
             m_SfxAudioSources[i].volume = fSfxVolume / 100.0f;
+         */
     }
     #endregion
 
     #region Functions
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    #region Play Sounds Functions
-    /// <summary>Play specified music.</summary>
+
+    #region Play Functions
+    /// <summary>
+    /// Play specified music.
+    /// </summary>
     /// <param name="_MusicName">Specified Music</param>
     public void PlayMusic(string _MusicName)
     {
@@ -80,6 +119,7 @@ public class SoundManager : MonoBehaviour
             if (m_MusicAudioSources[i].name == _MusicName)
             {
                 m_MusicAudioSources[i].Play();
+                m_MusicPauseTimes[i] = -1;
                 break;
             }
         }
@@ -97,38 +137,66 @@ public class SoundManager : MonoBehaviour
             if (m_SfxAudioSources[i].name == _SfxName)
             {
                 m_SfxAudioSources[i].Play();
+                m_SfxPauseTimes[i] = -1;
                 break;
             }
         }
     }
-    // Play all music
+    /// <summary>
+    /// Play all music
+    /// </summary>
     public void PlayAllMusic()
     {
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
+        {
             m_MusicAudioSources[i].Play();
+            m_MusicPauseTimes[i] = -1;
+        }
     }
-    // Play all sound effects
+    /// <summary>
+    /// Play all sound effects
+    /// </summary>
     public void PlayAllSfx()
     {
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
+        {
             m_SfxAudioSources[i].Play();
+            m_SfxPauseTimes[i] = -1;
+        }
     }
-    // Play random music
+    /// <summary>
+    /// Play random music
+    /// </summary>
     public void PlayRandomMusic()
     {
         if (m_MusicAudioSources.Length > 0)
-            m_MusicAudioSources[Random.Range(0, m_MusicAudioSources.Length)].Play();
+        {
+            int rand = Random.Range(0, m_MusicAudioSources.Length);
+            m_MusicAudioSources[rand].Play();
+            m_MusicPauseTimes[rand] = -1;
+        }
     }
-    // Play random sound effect
+    /// <summary>
+    /// Play random sound effect
+    /// </summary>
     public void PlayRandomSfx()
     {
         if (m_SfxAudioSources.Length > 0)
-            m_SfxAudioSources[Random.Range(0, m_SfxAudioSources.Length)].Play();
+        {
+            int rand = Random.Range(0, m_SfxAudioSources.Length);
+            m_SfxAudioSources[rand].Play();
+            m_SfxPauseTimes[rand] = -1;
+        }
     }
     #endregion
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    #region Stop Sounds Functions
-    // Stop specified music
+
+    #region Stop Functions
+    /// <summary>
+    /// Stop specified music
+    /// </summary>
+    /// <param name="_MusicName">Specified Music Name</param>
     public void StopMusic(string _MusicName)
     {
         _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
@@ -138,11 +206,15 @@ public class SoundManager : MonoBehaviour
             if (m_MusicAudioSources[i].name == _MusicName)
             {
                 m_MusicAudioSources[i].Stop();
+                m_MusicPauseTimes[i] = -1;
                 break;
             }
         }
     }
-    // Stop specified sound effect
+    /// <summary>
+    /// Stop specified sound effect
+    /// </summary>
+    /// <param name="_SfxName">Specified Sound Effect Name</param>
     public void StopSfx(string _SfxName)
     {
         _SfxName = m_GamePrefix + "_" + m_SfxPrefix + "_" + _SfxName;
@@ -152,25 +224,46 @@ public class SoundManager : MonoBehaviour
             if (m_SfxAudioSources[i].name == _SfxName)
             {
                 m_SfxAudioSources[i].Stop();
+                m_SfxPauseTimes[i] = -1;
                 break;
             }
         }
     }
-    // Stop all music
+    /// <summary>
+    /// Stop all music
+    /// </summary>
     public void StopAllMusic()
     {
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
+        {
             m_MusicAudioSources[i].Stop();
+            m_MusicPauseTimes[i] = -1;
+        }
     }
-    // Stop all sound effects
+    /// <summary>
+    /// Stop all sound effects
+    /// </summary>
     public void StopAllSfx()
     {
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
+        {
             m_SfxAudioSources[i].Stop();
+            m_SfxPauseTimes[i] = -1;
+        }
     }
     #endregion
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     #region Is Sound Playing Functions
-    // Is specified music playing
+    /// <summary>
+    /// Is the specified music playing
+    /// </summary>
+    /// <param name="_MusicName">Specified Music Name</param>
+    /// <returns>
+    /// Returns true if the specified music is playing
+    /// Returns false if the specified music is not playing or not found
+    /// </returns>
     public bool IsMusicPlaying(string _MusicName)
     {
         _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
@@ -181,7 +274,14 @@ public class SoundManager : MonoBehaviour
 
         return false;
     }
-    // Is specified sound effect playing
+    /// <summary>
+    /// Is specified sound efffect playing
+    /// </summary>
+    /// <param name="_SfxName">Specified Sound Effect Name</param>
+    /// <returns>
+    /// Returns true is the specified sound effect is playing
+    /// Returns false if the specified sound effect is not playing or not found
+    /// </returns>
     public bool IsSfxPlaying(string _SfxName)
     {
         _SfxName = m_GamePrefix + "_" + m_SfxPrefix + "_" + _SfxName;
@@ -192,7 +292,13 @@ public class SoundManager : MonoBehaviour
 
         return false;
     }
-    // Is any music playing
+    /// <summary>
+    /// Is any music playing
+    /// </summary>
+    /// <returns>
+    /// Returns true if any music is playing
+    /// Returns false is any music is not playing
+    /// </returns>
     public bool IsAnyMusicPlaying()
     {
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
@@ -201,7 +307,13 @@ public class SoundManager : MonoBehaviour
 
         return false;
     }
-    // Is any sound effect playing
+    /// <summary>
+    /// Is any sound effect playing
+    /// </summary>
+    /// <returns>
+    /// Returns true if any sound effect is playing
+    /// Returns false if any sound effect is not playing
+    /// </returns>
     public bool IsAnySfxPlaying()
     {
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
@@ -211,18 +323,18 @@ public class SoundManager : MonoBehaviour
         return false;
     }
     #endregion
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // Mute
-    // Pause/Resume
-    // Audio Length
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
     #region Audio Length Functions
     /// <summary>
-    ///  Gets the length of the music with the specified name.
+    /// Gets the length of the specified music
     /// </summary>
     /// <param name="_MusicName">Specified Music Name.</param>
-    /// <returns>Returns the length of the specified music.</returns>
+    /// <returns>
+    /// Returns the length of the specified music.
+    /// Returns -1 if the specified music is not found
+    /// </returns>
     public float GetMusicLength(string _MusicName)
     {
         _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
@@ -234,6 +346,14 @@ public class SoundManager : MonoBehaviour
         return -1;
     }
     // Return specified sound effect length
+    /// <summary>
+    /// Gets the length of the specified sound effect
+    /// </summary>
+    /// <param name="_SfxName">Specified Sound Effect Name</param>
+    /// <returns>
+    /// Returns the length of the specified sound effect
+    /// Returns -1 if the specified sound effect doesn't exist
+    /// </returns>
     public float GetSfxLength(string _SfxName)
     {
         _SfxName = m_GamePrefix + "_" + m_SfxPrefix + "_" + _SfxName;
@@ -244,11 +364,17 @@ public class SoundManager : MonoBehaviour
 
         return -1;
     }
-    // Return min music length
+    /// <summary>
+    /// Get the minimum length between all music
+    /// </summary>
+    /// <returns>
+    /// Returns the minimum length of all music
+    /// Returns -1 is no music exists
+    /// </returns>
     public float GetMinMusicLength()
     {
         if (m_MusicAudioSources.Length == 0)
-            return 0;
+            return -1;
 
         float minTime = m_MusicAudioSources[0].clip.length;
         int minMusic = 0;
@@ -264,11 +390,17 @@ public class SoundManager : MonoBehaviour
 
         return minTime;
     }
-    // Return max music length
+    /// <summary>
+    /// Gets the maximum length of all music
+    /// </summary>
+    /// <returns>
+    /// Returns the maximum length of all music
+    /// Returns -1 if no music exists
+    /// </returns>
     public float GetMaxMusicLength()
     {
         if (m_MusicAudioSources.Length == 0)
-            return 0;
+            return -1;
 
         float maxTime = m_MusicAudioSources[0].clip.length;
         int maxMusic = 0;
@@ -284,11 +416,17 @@ public class SoundManager : MonoBehaviour
 
         return maxTime;
     }
-    // Return min sound effect length
+    /// <summary>
+    /// Gets the minimum length for all sound effects
+    /// </summary>
+    /// <returns>
+    /// Returns the minimum length for all sound effects
+    /// Returns -1 if no sound effects exist
+    /// </returns>
     public float GetMinSfxLength()
     {
         if (m_SfxAudioSources.Length == 0)
-            return 0;
+            return -1;
 
         float minTime = m_SfxAudioSources[0].clip.length;
         int minSfx = 0;
@@ -304,11 +442,17 @@ public class SoundManager : MonoBehaviour
 
         return minTime;
     }
-    // Return max sound effect length
+    /// <summary>
+    /// Gets the maximum length for all sound effects
+    /// </summary>
+    /// <returns>
+    /// Returns the maximum length for all sound effects
+    /// Returns -1 if no sound effects exist
+    /// </returns>
     public float GetMaxSfxLength()
     {
         if (m_SfxAudioSources.Length == 0)
-            return 0;
+            return -1;
 
         float maxTime = m_SfxAudioSources[0].clip.length;
         int maxSfx = 0;
@@ -325,9 +469,19 @@ public class SoundManager : MonoBehaviour
         return maxTime;
     }
     #endregion
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     #region Elapsed Time Functions
-    // Return how long specified music has been playing
+    /// <summary>
+    /// Gets how long specified music has been playing
+    /// </summary>
+    /// <param name="_MusicName">Specified Music Name</param>
+    /// <returns>
+    /// Returns how long specified music has been playing
+    /// Returns 0 if the specified music is not playing
+    /// Returns -1 if the specified music is not playing or doesn't exist
+    /// </returns>
     public float GetMusicPlaybackTime(string _MusicName)
     {
         _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
@@ -335,12 +489,25 @@ public class SoundManager : MonoBehaviour
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
         {
             if (m_MusicAudioSources[i].name == _MusicName)
-                return m_MusicAudioSources[i].time;
+            {
+                if (m_MusicAudioSources[i].isPlaying)
+                    return m_MusicAudioSources[i].time;
+
+                return 0;
+            }
         }
 
         return -1;
     }
-    // Return how long specified sound effect has been playing
+    /// <summary>
+    /// Gets how long specified sound effect has been playing
+    /// </summary>
+    /// <param name="_SfxName">Specified Sound Effect name</param>
+    /// <returns>
+    /// Returns how long specified sound effect has been playing
+    /// Returns 0 if the specified sound effect is not playing
+    /// Returns -1 if the specified sound effect doesn't exist
+    /// </returns>
     public float GetSfxPlaybackTime(string _SfxName)
     {
         _SfxName = m_GamePrefix + "_" + m_SfxPrefix + "_" + _SfxName;
@@ -348,15 +515,26 @@ public class SoundManager : MonoBehaviour
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
         {
             if (m_SfxAudioSources[i].name == _SfxName)
-                return m_SfxAudioSources[i].time;
+            {
+                if (m_SfxAudioSources[i].isPlaying)
+                    return m_SfxAudioSources[i].time;
+
+                return 0;
+            }
         }
 
         return -1;
     }
     #endregion
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     #region Looping Functions
-    // Set Loop of specified music
+    /// <summary>
+    /// Set looping of specified music
+    /// </summary>
+    /// <param name="_MusicName">Specified Music Name</param>
+    /// <param name="_Looping">Value to set looping of specified music</param>
     public void SetMusicLoop(string _MusicName, bool _Looping)
     {
         _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
@@ -370,7 +548,11 @@ public class SoundManager : MonoBehaviour
             }
         }
     }
-    // Set Loop of specified sound effect
+    /// <summary>
+    /// Set looping is specified sound effect
+    /// </summary>
+    /// <param name="_SfxName">Specified Sound Effect Name</param>
+    /// <param name="_Looping">Value to set looping of specified sound effect</param>
     public void SetSfxLoop(string _SfxName, bool _Looping)
     {
         _SfxName = m_GamePrefix + "_" + m_SfxPrefix + "_" + _SfxName;
@@ -384,24 +566,34 @@ public class SoundManager : MonoBehaviour
             }
         }
     }
-    // Set Loop of all music
+    /// <summary>
+    /// Set looping of all music
+    /// </summary>
+    /// <param name="_Looping">Value to set looping of all music</param>
     public void SetAllMusicLoop(bool _Looping)
     {
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
             m_MusicAudioSources[i].loop = _Looping;
     }
-    // Set Loop of all sound effect
+    /// <summary>
+    /// Set looping of all sound effect
+    /// </summary>
+    /// <param name="_Looping">Value to set looping of all sound effect</param>
     public void SetAllSfxLoop(bool _Looping)
     {
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
             m_SfxAudioSources[i].loop = _Looping;
     }
     #endregion
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Times Looped
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     #region Set Volume Functions
-    // Set volume of specified music
+    /// <summary>
+    /// Set the volume of specified music
+    /// </summary>
+    /// <param name="_MusicName">Specified Music Name</param>
+    /// <param name="_Volume">Value to set volume of specified music</param>
     public void SetMusicVolume(string _MusicName, float _Volume)
     {
         _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
@@ -415,7 +607,11 @@ public class SoundManager : MonoBehaviour
             }
         }
     }
-    // Set volume of specified sound effect
+    /// <summary>
+    /// Set the volume of specified sound effect
+    /// </summary>
+    /// <param name="_SfxName">Specified Sound Effect</param>
+    /// <param name="_Volume">Value to set volume of specified sound effect</param>
     public void SetSfxVolume(string _SfxName, float _Volume)
     {
         _SfxName = m_GamePrefix + "_" + m_SfxPrefix + "_" + _SfxName;
@@ -429,22 +625,37 @@ public class SoundManager : MonoBehaviour
             }
         }
     }
-    // Set volume of all music
+    /// <summary>
+    /// Set volume of all music
+    /// </summary>
+    /// <param name="_Volume">Value to set volume of all music</param>
     public void SetAllMusicVolume(float _Volume)
     {
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
             m_MusicAudioSources[i].volume = _Volume;
     }
-    // Set volume of all sound effects
+    /// <summary>
+    /// Set volume of all souund effects
+    /// </summary>
+    /// <param name="_Volume">Value to set volume of all sound effects</param>
     public void SetAllSfxVolume(float _Volume)
     {
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
             m_SfxAudioSources[i].volume = _Volume;
     }
     #endregion
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     #region Get Volume Functions
-    // Get volume of specified music
+    /// <summary>
+    /// Get volume of specified music
+    /// </summary>
+    /// <param name="_MusicName">Specified Music Name</param>
+    /// <returns>
+    /// Returns the volume of the specified music
+    /// Returns -1 if the specified music doesn't exist
+    /// </returns>
     public float GetMusicVolume(string _MusicName)
     {
         _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
@@ -455,7 +666,14 @@ public class SoundManager : MonoBehaviour
 
         return -1;
     }
-    // Get volume of specified sound effect
+    /// <summary>
+    /// Get volume of specified sound effect
+    /// </summary>
+    /// <param name="_SfxName">Specified Sound Effect Name</param>
+    /// <returns>
+    /// Returns the volume of the specified sound effect
+    /// Returns -1 if the specified sound effect doesn't exist
+    /// </returns>
     public float GetSfxVolume(string _SfxName)
     {
         _SfxName = m_GamePrefix + "_" + m_SfxPrefix + "_" + _SfxName;
@@ -466,12 +684,575 @@ public class SoundManager : MonoBehaviour
 
         return -1;
     }
+    /// <summary>
+    /// Get minimum volume of all music
+    /// </summary>
+    /// <returns>
+    /// Returns minimum volume of all music
+    /// Returns -1 if no music exists
+    /// </returns>
+    public float GetMinMusicVolume()
+    {
+        if (m_MusicAudioSources.Length == 0)
+            return -1;
+
+        float minVolume = m_MusicAudioSources[0].volume;
+        int minMusic = 0;
+
+        for (int i = 1; i < m_MusicAudioSources.Length; i++)
+        {
+            if (m_MusicAudioSources[i].volume < m_MusicAudioSources[minMusic].volume)
+            {
+                minVolume = m_MusicAudioSources[i].volume;
+                minMusic = i;
+            }
+        }
+
+        return minVolume;
+    }
+    /// <summary>
+    /// Get maximum volume of all music
+    /// </summary>
+    /// <returns>
+    /// Returns maximum volume of all music
+    /// Returns -1 if no music exists
+    /// </returns>
+    public float GetMaxMusicVolume()
+    {
+        if (m_MusicAudioSources.Length == 0)
+            return -1;
+
+        float maxVolume = m_MusicAudioSources[0].volume;
+        int maxMusic = 0;
+
+        for (int i = 1; i < m_MusicAudioSources.Length; i++)
+        {
+            if (m_MusicAudioSources[i].volume > m_MusicAudioSources[maxMusic].volume)
+            {
+                maxVolume = m_MusicAudioSources[i].volume;
+                maxMusic = i;
+            }
+        }
+
+        return maxVolume;
+    }
+    /// <summary>
+    /// Get minimum volume of all sound effects
+    /// </summary>
+    /// <returns>
+    /// Returns minimum volume of all sound effects
+    /// Returns -1 if no sound effects exists
+    /// </returns>
+    public float GetMinSfxVolume()
+    {
+        if (m_SfxAudioSources.Length == 0)
+            return -1;
+
+        float minVolume = m_SfxAudioSources[0].volume;
+        int minSfx = 0;
+
+        for (int i = 1; i < m_SfxAudioSources.Length; i++)
+        {
+            if (m_SfxAudioSources[i].volume < m_SfxAudioSources[minSfx].volume)
+            {
+                minVolume = m_SfxAudioSources[i].volume;
+                minSfx = i;
+            }
+        }
+
+        return minVolume;
+    }
+    /// <summary>
+    /// Get maximum volume of all sound effects
+    /// </summary>
+    /// <returns>
+    /// Returns maximum volume of all sound effects
+    /// Returns -1 if no sound effects exists
+    /// </returns>
+    public float GetMaxSfxVolume()
+    {
+        if (m_SfxAudioSources.Length == 0)
+            return -1;
+
+        float maxVolume = m_SfxAudioSources[0].volume;
+        int maxSfx = 0;
+
+        for (int i = 1; i < m_SfxAudioSources.Length; i++)
+        {
+            if (m_SfxAudioSources[i].volume > m_SfxAudioSources[maxSfx].volume)
+            {
+                maxVolume = m_SfxAudioSources[i].volume;
+                maxSfx = i;
+            }
+        }
+
+        return maxVolume;
+    }
     #endregion
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Mute Functions
+    /// <summary>
+    /// Gets mute of specified music
+    /// </summary>
+    /// <param name="_MusicName">Specified Music Name</param>
+    /// <returns>
+    /// Returns the mute value of the specified music
+    /// Returns false if specified music doesn't exist
+    /// </returns>
+    public bool GetMuteMusic(string _MusicName)
+    {
+        _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
+
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+            if (m_MusicAudioSources[i].name == _MusicName)
+                return m_MusicAudioSources[i].mute;
+
+        return false;
+    }
+    /// <summary>
+    /// Sets mute of specified Music
+    /// </summary>
+    /// <param name="_MusicName">Specified Music Name</param>
+    /// <param name="_Mute">Value to set mute of specified music</param>
+    public void SetMuteMusic(string _MusicName, bool _Mute)
+    {
+        _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
+
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+        {
+            if (m_MusicAudioSources[i].name == _MusicName)
+            {
+                m_MusicAudioSources[i].mute = _Mute;
+                return;
+            }
+        }
+    }
+    /// <summary>
+    /// Mutes specified music
+    /// </summary>
+    /// <param name="_MusicName">Specified Music Name</param>
+    public void MuteMusic(string _MusicName)
+    {
+        _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
+
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+        {
+            if (m_MusicAudioSources[i].name == _MusicName)
+            {
+                m_MusicAudioSources[i].mute = true;
+                return;
+            }
+        }
+    }
+    /// <summary>
+    /// Unmutes specified music
+    /// </summary>
+    /// <param name="_MusicName">Specified Music Name</param>
+    public void UnmuteMusic(string _MusicName)
+    {
+        _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
+
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+        {
+            if (m_MusicAudioSources[i].name == _MusicName)
+            {
+                m_MusicAudioSources[i].mute = false;
+                return;
+            }
+        }
+    }
+    /// <summary>
+    /// Toggle specified Music
+    /// </summary>
+    /// <param name="_MusicName">Specified Music Name</param>
+    public void ToggleMuteMusic(string _MusicName)
+    {
+        _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
+
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+        {
+            if (m_MusicAudioSources[i].name == _MusicName)
+            {
+                m_MusicAudioSources[i].mute = !m_MusicAudioSources[i].mute;
+                return;
+            }
+        }
+    }
+    /// <summary>
+    /// Mute all music
+    /// </summary>
+    public void MuteAllMusic()
+    {
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+            m_MusicAudioSources[i].mute = true;
+    }
+    /// <summary>
+    /// Unmute all music
+    /// </summary>
+    public void UnmuteAllMusic()
+    {
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+            m_MusicAudioSources[i].mute = false;
+    }
+    /// <summary>
+    /// Toggle mute all music
+    /// </summary>
+    public void ToggleMuteAllMusic()
+    {
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+            m_MusicAudioSources[i].mute = !m_MusicAudioSources[i].mute;
+    }
+    /// <summary>
+    /// Gets mute of specified sound effect
+    /// </summary>
+    /// <param name="_SfxName">Specified sound effect Name</param>
+    /// <returns>
+    /// Returns the mute value of the specified sound effect
+    /// Returns false if specified sound effect doesn't exist
+    /// </returns>
+    public bool GetMuteSfx(string _SfxName)
+    {
+        _SfxName = m_GamePrefix + "_" + m_SfxPrefix + "_" + _SfxName;
+
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+            if (m_SfxAudioSources[i].name == _SfxName)
+                return m_SfxAudioSources[i].mute;
+
+        return false;
+    }
+    /// <summary>
+    /// Sets mute of specified sound effect
+    /// </summary>
+    /// <param name="_SfxName">Specified sound effect Name</param>
+    /// <param name="_Mute">Value to set mute of specified sound effect</param>
+    public void SetMuteSfx(string _SfxName, bool _Mute)
+    {
+        _SfxName = m_GamePrefix + "_" + m_SfxPrefix + "_" + _SfxName;
+
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+        {
+            if (m_SfxAudioSources[i].name == _SfxName)
+            {
+                m_SfxAudioSources[i].mute = _Mute;
+                return;
+            }
+        }
+    }
+    /// <summary>
+    /// Mutes specified sound effect
+    /// </summary>
+    /// <param name="_SfxName">Specified sound effect Name</param>
+    public void MuteSfx(string _SfxName)
+    {
+        _SfxName = m_GamePrefix + "_" + m_SfxPrefix + "_" + _SfxName;
+
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+        {
+            if (m_SfxAudioSources[i].name == _SfxName)
+            {
+                m_SfxAudioSources[i].mute = true;
+                return;
+            }
+        }
+    }
+    /// <summary>
+    /// Unmutes specified sound effect
+    /// </summary>
+    /// <param name="_SfxName">Specified sound effect Name</param>
+    public void UnmuteSfx(string _SfxName)
+    {
+        _SfxName = m_GamePrefix + "_" + m_SfxPrefix + "_" + _SfxName;
+
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+        {
+            if (m_SfxAudioSources[i].name == _SfxName)
+            {
+                m_SfxAudioSources[i].mute = false;
+                return;
+            }
+        }
+    }
+    /// <summary>
+    /// Toggle specified sound effect
+    /// </summary>
+    /// <param name="_SfxName">Specified sound effect Name</param>
+    public void ToggleMuteSfx(string _SfxName)
+    {
+        _SfxName = m_GamePrefix + "_" + m_SfxPrefix + "_" + _SfxName;
+
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+        {
+            if (m_SfxAudioSources[i].name == _SfxName)
+            {
+                m_SfxAudioSources[i].mute = !m_SfxAudioSources[i].mute;
+                return;
+            }
+        }
+    }
+    /// <summary>
+    /// Mute all sound effects
+    /// </summary>
+    public void MuteAllSfx()
+    {
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+            m_SfxAudioSources[i].mute = true;
+    }
+    /// <summary>
+    /// Unmute all sound effects
+    /// </summary>
+    public void UnmuteAllSfx()
+    {
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+            m_SfxAudioSources[i].mute = false;
+    }
+    /// <summary>
+    /// Toggle mute all sound effects
+    /// </summary>
+    public void ToggleMuteAllSfx()
+    {
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+            m_SfxAudioSources[i].mute = !m_SfxAudioSources[i].mute;
+    }
+    #endregion
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Play at Start Time Functions
+    /// <summary>
+    /// Play specified music.
+    /// </summary>
+    /// <param name="_MusicName">Specified Music</param>
+    /// <param name="_StartTime">Specified Start Time</param>
+    public void PlayMusicAtStartTime(string _MusicName, float _StartTime)
+    {
+        _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
+
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+        {
+            if (m_MusicAudioSources[i].name == _MusicName)
+            {
+                PlayMusic(_MusicName);
+                m_MusicAudioSources[i].time = _StartTime;
+                return;
+            }
+        }
+    }
+    /// <summary>
+    /// Play specified sound effect
+    /// </summary>
+    /// <param name="_SfxName">Specified Sound Effect Name</param>
+    /// <param name="_StartTime">Specified Start Time</param>
+    public void PlaySfxAtStartTime(string _SfxName, float _StartTime)
+    {
+        _SfxName = m_GamePrefix + "_" + m_SfxPrefix + "_" + _SfxName;
+
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+        {
+            if (m_SfxAudioSources[i].name == _SfxName)
+            {
+                PlaySfx(_SfxName);
+                m_SfxAudioSources[i].time = _StartTime;
+                return;
+            }
+        }
+    }
+    /// <summary>
+    /// Play all music
+    /// </summary>
+    /// <param name="_StartTime">Specified Start Time</param>
+    public void PlayAllMusicAtStartTime(float _StartTime)
+    {
+        PlayAllMusic();
+
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+            m_MusicAudioSources[i].time = _StartTime;
+    }
+    /// <summary>
+    /// Play all sound effects
+    /// </summary>
+    /// <param name="_StartTime">Specified Start Time</param>
+    public void PlayAllSfxAtStartTime(float _StartTime)
+    {
+        PlayAllSfx();
+
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+            m_SfxAudioSources[i].time = _StartTime;
+    }
+    #endregion
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Pause
+    /// <summary>
+    /// Pause specified music
+    /// </summary>
+    /// <param name="_MusicName">Specified Music Name</param>
+    public void PauseMusic(string _MusicName)
+    {
+        _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
+
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+        {
+            if (m_MusicAudioSources[i].name == _MusicName)
+            {
+                if (m_MusicAudioSources[i].isPlaying)
+                {
+                    m_MusicPauseTimes[i] = m_MusicAudioSources[i].time;
+                    m_MusicAudioSources[i].Pause();
+                }
+
+                return;
+            }
+        }
+    }
+    /// <summary>
+    /// Pause specified sound effect
+    /// </summary>
+    /// <param name="_SfxName">Specified Sound Effect Name</param>
+    public void PauseSfx(string _SfxName)
+    {
+        _SfxName = m_GamePrefix + "_" + m_SfxPrefix + "_" + _SfxName;
+
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+        {
+            if (m_SfxAudioSources[i].name == _SfxName)
+            {
+                if (m_SfxAudioSources[i].isPlaying)
+                {
+                    m_SfxPauseTimes[i] = m_SfxAudioSources[i].time;
+                    m_SfxAudioSources[i].Pause();
+                }
+
+                return;
+            }
+        }
+    }
+    /// <summary>
+    /// Pause all music
+    /// </summary>
+    public void PauseAllMusic()
+    {
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+        {
+            if (m_MusicAudioSources[i].isPlaying)
+            {
+                m_MusicPauseTimes[i] = m_MusicAudioSources[i].time;
+                m_MusicAudioSources[i].Pause();
+            }
+        }
+    }
+    /// <summary>
+    /// Pause all sound effects
+    /// </summary>
+    public void PauseAllSfx()
+    {
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+        {
+            if (m_SfxAudioSources[i].isPlaying)
+            {
+                m_SfxPauseTimes[i] = m_SfxAudioSources[i].time;
+                m_SfxAudioSources[i].Pause();
+            }
+        }
+    }
+    #endregion
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Resume
+    /// <summary>
+    /// Resume specified paused music
+    /// </summary>
+    /// <param name="_MusicName">Specified Music Name</param>
+    public void ResumeMusic(string _MusicName)
+    {
+        _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
+
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+        {
+            if (m_MusicAudioSources[i].name == _MusicName)
+            {
+                if (m_MusicPauseTimes[i] > 0)
+                    PlayMusicAtStartTime(_MusicName, m_MusicPauseTimes[i]);
+
+                return;
+            }
+        }
+    }
+    /// <summary>
+    /// Resume specified paused sound effect
+    /// </summary>
+    /// <param name="_SfxName">Specified Sound Effect Name</param>
+    public void ResumeSfx(string _SfxName)
+    {
+        _SfxName = m_GamePrefix + "_" + m_SfxPrefix + "_" + _SfxName;
+
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+        {
+            if (m_SfxAudioSources[i].name == _SfxName)
+            {
+                if (m_SfxPauseTimes[i] > 0)
+                    PlaySfxAtStartTime(_SfxName, m_SfxPauseTimes[i]);
+
+                return;
+            }
+        }
+    }
+    /// <summary>
+    /// Resume all paused music
+    /// </summary>
+    public void ResumeAllMusic()
+    {
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+        {
+            if (m_MusicPauseTimes[i] > 0)
+            {
+                string _MusicName = m_MusicAudioSources[i].name;
+                _MusicName = _MusicName.Substring(m_GamePrefix.Length + m_MusicPrefix.Length + 2);
+                PlayMusicAtStartTime(_MusicName, m_MusicPauseTimes[i]);
+            }
+        }
+    }
+    /// <summary>
+    /// Resume all paused sound effects
+    /// </summary>
+    public void ResumeAllSfx()
+    {
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+        {
+            if (m_SfxPauseTimes[i] > 0)
+            {
+                string _SfxName = m_SfxAudioSources[i].name;
+                _SfxName = _SfxName.Substring(m_GamePrefix.Length + m_SfxPrefix.Length + 2);
+                PlaySfxAtStartTime(_SfxName, m_SfxPauseTimes[i]);
+            }
+
+        }
+    }
+    #endregion
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Times Looped
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     // Pitch
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     // Tempo
-    // Chose Start Time
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
     // Delayed Play
-    // Slowly Increasing/Decreasing Temp (Extra)
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Slowly Increasing/Decreasing Temp
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     #endregion
 }
