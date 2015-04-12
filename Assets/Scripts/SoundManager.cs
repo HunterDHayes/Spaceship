@@ -1,5 +1,11 @@
-﻿using UnityEngine;
+﻿////////////////////////////////////////////////////////////////////////////////////////////////////////
+// File Name:   SoundManager.cs
+// Author:      Hunter Hayes
+// Purpose:     To manage all audio assets
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class SoundManager : MonoBehaviour
 {
@@ -12,22 +18,41 @@ public class SoundManager : MonoBehaviour
     public float m_DefaultMusicVolume, m_DefaultSfxVolume;
 
     // Audio
-    public AudioClip[] m_MusicAudioClips;
-    public AudioClip[] m_SfxAudioClips;
+    //public AudioClip[] m_MusicAudioClips;
+    //public AudioClip[] m_SfxAudioClips;
     private AudioSource[] m_MusicAudioSources;
     private AudioSource[] m_SfxAudioSources;
 
     // Needed for Pause and Resume
     private float[] m_MusicPauseTimes;
     private float[] m_SfxPauseTimes;
+
+    // Needed for Times Looped
+    private float[] m_MusicPlayTimes;
+    private float[] m_SfxPlayTimes;
+    private int[] m_MusicTimesLooped;
+    private int[] m_SfxTimesLooped;
+
+    // Music On/Off and SFX On/Off Buttons
+    private GameObject m_MusicOnButton, m_MusicOffButton, m_SFXOnButton, m_SFXOffButton;
+
+    // Bool for not starting twice
+    private bool hasStarted = false;
     #endregion
 
     #region Unity Functions
+
     /// <summary>
-    /// Used to initialize the Sound Manager
-    /// All music and sound effects are set to default values
     /// </summary>
     void Start()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
+    /// <summary>
+    /// Used to initialize the Sound Manager before Start is called
+    /// </summary>
+    void Awake()
     {
         // First Half of if statement //
         // If first time playing, sets the default volume values of music and sound effects 
@@ -36,7 +61,7 @@ public class SoundManager : MonoBehaviour
         if (PlayerPrefs.GetInt("FirstTimePlaying") == 0 || m_UseDefaultValuesAlways)
         {
             PlayerPrefs.SetFloat("MusicVolume", m_DefaultMusicVolume);
-            PlayerPrefs.SetFloat("SFXVolume", m_DefaultSfxVolume);
+            PlayerPrefs.SetFloat("SfxVolume", m_DefaultSfxVolume);
             PlayerPrefs.SetInt("FirstTimePlaying", 1);
         }
 
@@ -45,64 +70,158 @@ public class SoundManager : MonoBehaviour
         float fMusicVolume = PlayerPrefs.GetFloat("MusicVolume");
         float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
 
-        m_MusicAudioSources = new AudioSource[m_MusicAudioClips.Length];
+        Object[] music = Resources.LoadAll("Audio/Music", typeof(AudioClip));
+        Object[] sfx = Resources.LoadAll("Audio/SFX", typeof(AudioClip));
+
+        m_MusicAudioSources = new AudioSource[music.Length];
 
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
         {
             GameObject child = new GameObject("Player");
             child.transform.parent = gameObject.transform;
 
-            m_MusicAudioSources[i] = child.AddComponent("AudioSource") as AudioSource;
-            m_MusicAudioSources[i].clip = m_MusicAudioClips[i];
+            m_MusicAudioSources[i] = child.AddComponent<AudioSource>() as AudioSource;
+            m_MusicAudioSources[i].clip = (AudioClip)music[i];
             m_MusicAudioSources[i].volume = fMusicVolume / 100.0f;
             m_MusicAudioSources[i].loop = true;
-            m_MusicAudioSources[i].name = m_MusicAudioClips[i].name;
+            m_MusicAudioSources[i].name = music[i].name;
         }
 
-        m_SfxAudioSources = new AudioSource[m_SfxAudioClips.Length];
+        m_SfxAudioSources = new AudioSource[sfx.Length];
 
         for (int i = 0; i < m_SfxAudioSources.Length; i++)
         {
             GameObject child = new GameObject("Player");
             child.transform.parent = gameObject.transform;
 
-            m_SfxAudioSources[i] = child.AddComponent("AudioSource") as AudioSource;
-            m_SfxAudioSources[i].clip = m_SfxAudioClips[i];
+            m_SfxAudioSources[i] = child.AddComponent<AudioSource>() as AudioSource;
+            m_SfxAudioSources[i].clip = (AudioClip)sfx[i];
             m_SfxAudioSources[i].volume = fSfxVolume / 100.0f;
             m_SfxAudioSources[i].loop = false;
-            m_SfxAudioSources[i].name = m_SfxAudioClips[i].name;
+            m_SfxAudioSources[i].name = sfx[i].name;
         }
         #endregion
 
         // Init pause times to -1 for apuse and resume
         m_MusicPauseTimes = new float[m_MusicAudioSources.Length];
+        m_MusicPlayTimes = new float[m_MusicAudioSources.Length];
+        m_MusicTimesLooped = new int[m_MusicAudioSources.Length];
         m_SfxPauseTimes = new float[m_SfxAudioSources.Length];
+        m_SfxPlayTimes = new float[m_SfxAudioSources.Length];
+        m_SfxTimesLooped = new int[m_SfxAudioSources.Length];
 
-        for (int i = 0; i < m_MusicPauseTimes.Length; i++)
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+        {
             m_MusicPauseTimes[i] = -1;
+            m_MusicPlayTimes[i] = -1;
+            m_MusicTimesLooped[i] = -1;
+        }
 
-        for (int i = 0; i < m_MusicPauseTimes.Length; i++)
-            m_MusicPauseTimes[i] = -1;
+        for (int i = 0; i < m_SfxAudioSources.Length; i++)
+        {
+            m_SfxPauseTimes[i] = -1;
+            m_SfxPlayTimes[i] = -1;
+            m_SfxTimesLooped[i] = -1;
+        }
+
+        SetUpMusicAndSfxButtons();
     }
     /// <summary>
     /// Updates the Sound Manager
     /// </summary>
     void Update()
     {
-        /*
-        float fMusicVolume = PlayerPrefs.GetFloat("MusicVolume");
-        float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+        {
+            if (m_MusicPlayTimes[i] > m_MusicAudioSources[i].time)
+                m_MusicTimesLooped[i]++;
+
+            m_MusicPlayTimes[i] = m_MusicAudioSources[i].time;
+        }
+    }
+
+    public void TurnOnOffMusic(bool _value)
+    {
+        PlayerPrefs.SetFloat("MusicVolume", m_DefaultMusicVolume);
 
         for (int i = 0; i < m_MusicAudioSources.Length; i++)
-            m_MusicAudioSources[i].volume = fMusicVolume / 100.0f;
+            m_MusicAudioSources[i].volume = m_DefaultMusicVolume / 100.0f;
 
-        for (int i = 0; i < m_SfxAudioSources.Length; i++)
-            m_SfxAudioSources[i].volume = fSfxVolume / 100.0f;
-         */
+        if (_value)
+        {
+            PlayerPrefs.SetFloat("MusicVolume", 0);
+
+            for (int i = 0; i < m_MusicAudioSources.Length; i++)
+                m_MusicAudioSources[i].volume = 0 / 100.0f;
+        }
+    }
+
+    public void TurnOnOffSfx(bool _value)
+    {
+        PlayerPrefs.SetFloat("SfxVolume", m_DefaultSfxVolume);
+
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+            m_SfxAudioSources[i].volume = m_DefaultSfxVolume / 100.0f;
+
+        if (_value)
+        {
+            PlayerPrefs.SetFloat("SfxVolume", 0);
+
+            for (int i = 0; i < m_MusicAudioSources.Length; i++)
+                m_SfxAudioSources[i].volume = 0 / 100.0f;
+        }
     }
     #endregion
 
     #region Functions
+    public void SetUpMusicAndSfxButtons()
+    {
+        float fMusicVolume = PlayerPrefs.GetFloat("MusicVolume");
+        float fSfxVolume = PlayerPrefs.GetFloat("SfxVolume");
+
+        // Find the objects with Music On/Off Button and SFX On/Off Button
+        m_MusicOnButton = GameObject.FindGameObjectWithTag("MusicOnButton");
+        m_MusicOffButton = GameObject.FindGameObjectWithTag("MusicOffButton");
+        m_SFXOnButton = GameObject.FindGameObjectWithTag("SfxOnButton");
+        m_SFXOffButton = GameObject.FindGameObjectWithTag("SfxOffButton");
+
+        // Set Music Button to On or Off based on previous selection
+        // If buttons not found, skip
+        if (m_MusicOnButton && m_MusicOffButton)
+        {
+            if (fMusicVolume > 0)
+            {
+                m_MusicOnButton.gameObject.SetActive(true);
+                m_MusicOffButton.gameObject.SetActive(false);
+                TurnOnOffMusic(false);
+            }
+            else
+            {
+                m_MusicOnButton.gameObject.SetActive(false);
+                m_MusicOffButton.gameObject.SetActive(true);
+                TurnOnOffMusic(true);
+            }
+        }
+
+        // Set SFX Button to On or Off based on previous selection
+        // If buttons not found, skip
+        if (m_SFXOnButton && m_SFXOffButton)
+        {
+            if (fSfxVolume > 0)
+            {
+                m_SFXOnButton.gameObject.SetActive(true);
+                m_SFXOffButton.gameObject.SetActive(false);
+                TurnOnOffSfx(false);
+            }
+            else
+            {
+                m_SFXOnButton.gameObject.SetActive(false);
+                m_SFXOffButton.gameObject.SetActive(true);
+                TurnOnOffSfx(true);
+            }
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     #region Play Functions
@@ -1236,6 +1355,30 @@ public class SoundManager : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Times Looped
+    #region Times Looped
+    /// <summary>
+    /// Returns the number of times the specified music has looped
+    /// </summary>
+    /// <param name="_MusicName">Specified Music Name</param>
+    /// <returns>
+    /// Returns the number of times the specified music has looped
+    /// Return -1 if the specified music isn't playing or doesn't exist
+    /// </returns>
+    public int GetMusicTimesLooped(string _MusicName)
+    {
+        _MusicName = m_GamePrefix + "_" + m_MusicPrefix + "_" + _MusicName;
+
+        for (int i = 0; i < m_MusicAudioSources.Length; i++)
+        {
+            if (m_MusicAudioSources[i].name == _MusicName)
+            {
+
+            }
+        }
+
+        return -1;
+    }
+    #endregion
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
